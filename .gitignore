@@ -1,0 +1,16 @@
+
+
+## latex:
+
+*.aux
+*.lof
+*.log
+*.fls
+*.toc
+*.fls
+*.cb
+*.fmt
+
+*.dvi
+*.xdv
+*.DS_Store
