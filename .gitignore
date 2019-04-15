@@ -4,6 +4,7 @@
 
 *.aux
 *.lof
+*.out
 *.log
 *.fls
 *.toc

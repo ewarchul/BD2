@@ -1,9 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb}
+\usepackage{lscape}
 \usepackage{cite}
 \usepackage{listings}
 \usepackage{algorithm2e}
+\usepackage{booktabs}
 \usepackage{color}
 \usepackage{amsmath}
 \setcounter{tocdepth}{3}
@@ -97,18 +99,400 @@ Umożliwia on nadawanie i odbieranie uprawnień do przeglądania i wykorzystania
 Uprawnienia są przyznawane do każdej umowy lub do grupy umów niezależnie.\\
 System także udostępnia informacje o posiadanych danych i osobach upoważnionych do ich przetwarzania na żądanie podmiotu którego te dane dotyczą.\\
 W celu realizacji projektu zakłada się, że system powstaje na potrzeby firmy $\mathcal{FIRMA}$ i jest przeznaczony wyłącznie do użytku wewnętrznego.
+\subsection{Specyfikacja technologii}
+	Do zrealizowania projektu zostaną użyte następujące technologie:
+		\begin{itemize}
+			\item \texttt{Python 3.7}, który posłuży do napisania aplikacji dostępowej i raportowej do bazy danych
+			\item \texttt{PyQt}, w którym zostanie zbudowany graficzny interfejs użytkownika
+			\item \texttt{SQLite} jako silnik bazy danych.
+		\end{itemize}
+\newpage
 \section{Etap 0. \label{s0}}
 \subsection{Model pojęciowy}
 \subsubsection{Diagram E-R}
+Na rysunku (\ref{er1}) znajduje się powstały w ramach analizy systemowej diagram E-R. Kolorem zielonym zostały oznaczone encje słownikowe.
+\begin{figure}[H]
+			\centering
+			\includegraphics[width=1.10\textwidth]{/Users/warbarbye/Desktop/er1.png}
+			\label{er1}
+			\caption{Diagram E-R.}
+\end{figure}
 \subsubsection{Opis encji}
+%%%%
+\paragraph{Nazwa encji:\\ }
+Dział
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
+Id działu               & numeryczny      & Unikalny i niepusty   & Identyfikator działu w obrębie firmy $\mathcal{F}$ \\ \hline
+Nazwa działu            & łańcuch znakowy & Niepusty              & Nazwa działu                                       \\ \hline
+\end{tabular}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja reprezentująca działy, z których składa się firma $\mathcal{F}$. Podmioty zewnętrzne wchodzą w interakcje 
+biznesowe z działami firmy i umowy są podpisywane między działami, a podmiotem zewnętrznym.
+%%%%%%%%%%%%%%%%%
+\paragraph{Nazwa encji:\\ }
+Pracownik
+\paragraph{Atrybuty:\\ }
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                                    \\ \hline
+Id pracownika           & numeryczny      & Unikalny i niepusty   & Identyfikator pracownika w obrębie działu                        \\ \hline
+Imię                    & łańcuch znakowy & Niepusty              & Imię pracownika                                                  \\ \hline
+Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko pracownika                                              \\ \hline
+PESEL                   & łańcuch znakowy & Unikalny              & Numer PESEL pracownika                                           \\ \hline
+Stanowisko              & łańcuch znakowy & brak                  & Nazwa stanowiska zajmowanego przez pracownika                    \\ \hline
+Poziom dostępu          & numeryczny      & Niepusty              & Liczba ze zbioru $\{1, 2, 3, 4, 5\}$, określająca poziom dostępu \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Każdy \texttt{dział} składa się z pracowników, którzy wykonują w jego obrębie pewne zadania oraz posiadają dostęp do
+umów, które są podpisywane między ich działem, a podmiotem zewnętrzym. \texttt{Pracownik} posiada stopień dostępu do danych w zależności od jego funkcji.
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Katalog informacji
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
+Id katalogu             & numeryczny      & Unikalny i niepusty   & Identyfikator katalogu                             \\ \hline
+Nazwa katalogu          & łańcuch znakowy & Niepusty              & Znormalizowana nazwa katalogu.                     \\ \hline
+Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja \texttt{katalog informacji} jest kontenerem, w którym przechowywane są \texttt{katalogi umów} oraz \texttt{katalogi osób}, które są upoważnione do przetwarzania danych. Jeden \texttt{katalog informacji} jest zakładany dla \texttt{podmiotu zewnętrznego}.
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Katalog umów
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
+Id katalogu umów        & numeryczny      & Unikalny i niepusty   & Identyfikator katalogu umów                        \\ \hline
+Wymagany poziom dostępu & numeryczny      & Niepusty              & Minimalny poziom dostępu pracownika do umowy       \\ \hline
+Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja \texttt{katalog umów} jest kontenerem, który gromadzi \texttt{umowy} zawierane między firmą $\mathcal{F}$, a 
+\texttt{podmiotem zewnętrznym} w ramach współpracy. Dany \texttt{podmiot zewnętrzny} może mieć wiele \texttt{katalogów umów}, co wynika z faktu, że podmiot taki wchodzi w interakcje z różnymi \texttt{działami} oraz w ramach różnych projektów.
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Katalog osób
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
+Id katalogu osób        & numeryczny      & Unikalny i niepusty   & Identyfikator katalogu osób                        \\ \hline
+Wymagany poziom dostępu & numeryczny      & Niepusty              & Minimalny poziom dostępu pracownika do umowy       \\ \hline
+Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja \texttt{katalog osób} jest kontenerem, który gromadzi \texttt{osoby uprawnione} -- w funkcji rodzaju uprawnienia odpowiednio -- do przeglądania/przetwarzania/modyfikacji danych, które zawierają \texttt{umowy}. 
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Osoba uprawniona
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                   \\ \hline
+Numery osoby            & numeryczny      & Unikalny i niepusty   & Identyfikator osoby uprawnionej \\ \hline
+Imię                    & łańcuch znakowy & Niepusty              & Imię osoby uprawnionej          \\ \hline
+Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko osoby uprawnionej      \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja \texttt{osoba uprawniona} opisuje osobę, która może dokonać pewnych operacji na danych udostępnianych w ramach pewnej \texttt{umowy}. Może to być osoba, która jest \texttt{pracownikiem} firmy $\mathcal{F}$ lub jest reprezentantem \texttt{podmiotu zewnętrznego}.  
+%====%%%%
+\paragraph{Nazwa encji:\\ }
+Rodzaj uprawnienia
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                                                \\ \hline
+Rodzaj uprawnienia      & łańcuch znakowy & Niepusty              & Dostępne uprawnienia do danych z umów, które mogą posiadać dane osoby        \\ \hline
+Opis                    & łańcuch znakowy & Niepusty              & Opis uprawnienia, tj. opis czynności, które może podjąć osoba posiadające je \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\paragraph{Opis encji: \\}
+Encja słownikowa, która zawiera dostępne rodzaje uprawnień do danych oraz ich słowny opis.
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Umowa
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                \\ \hline
+Id umowy                & numeryczny      & Unikalny i niepusty   & Unikalny identyfikator umowy \\ \hline
+Nazwa umowy             & łańcuch znakowy & Niepusty              & Znormalizowana nazwa umowy   \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja reprezentująca umowę podpisywaną między firmą $\mathcal{F}$ oraz \texttt{podmiotem zewnętrznym}. \texttt{Umowa} składa sie z pozycji o różnej treści. 
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Pozycja
+\paragraph{Atrybuty:\\ }
+
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}             \\ \hline
+Nazwa pozycji           & łańcuch znakowy      & Unikalny i niepusty   & Nazwa pozycji w umowie    \\ \hline
+Treść pozycji          & łańcuch znakowy & Niepusty              & Treść pozycji danej umowy \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Składowa \texttt{umowy} o określonej nazwie oraz treści. 
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Rodzaj umowy
+\paragraph{Atrybuty:\\ }
+
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                               \\ \hline
+Rodzaj umowy            & łańcuch znakowy & Niepusty              & Rodzaje umów jakie może zawierać podmiot zewnętrzny z firmą \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Encja słownikowa, która zawiera możliwe rodzaje umów, które są podpisywane między firmą $\mathcal{F}$, a \texttt{podmiotami zewnętrznymi}.
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Podmiot zewnętrzy
+\paragraph{Atrybuty:\\}
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                                \\ \hline
+Id podmiotu             & numeryczny      & Unikalny i niepusty   & Identyfikator podmiotu prawnego, który zawiera umowy z firmą \\ \hline
+Status prawny           & łańcuch znakowy & Niepusty              & Podmiot prywatny lub podmiot prawny                          \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Jest to byt, który zawarł umowę z firmą $\mathcal{F}$ i zawiera dostęp katalogu swoich umów oraz osób uprawnionych do tych umów. 
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Osoba prawna
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                 \\ \hline
+NIP                     & łańcuch znakowy & Unikalny i niepusty   & Numer NIP podmiotu prawnego   \\ \hline
+REGON                   & łańcuch znakowy & Unikalny              & Numer REGON podmiotu prawnego \\ \hline
+Nazwa                   & łańcuch znakowy & Niepusty              & Nazwa podmiotu prawnego       \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Podtyp \texttt{podmiotu zewnętrznego}, który reprezentuje podmioty prawne niebędące osobami fizycznymi zawierające umowy z firmą $\mathcal{F}$.
+%====
+%%%
+\paragraph{Nazwa encji:\\ }
+Osoba fizyczna
+\paragraph{Atrybuty:\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}            \\ \hline
+Imię                    & łańcuch znakowy & Niepusty              & Imię osoby fizycznej     \\ \hline
+Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko osoby fizycznej \\ \hline
+PESEL                   & łańcuch znakowy & Unikalny i niepusty   & Numer PESEL osoby        \\ \hline
+\end{tabular}%
+}
+\end{table}
+\paragraph{Opis encji: \\}
+Podtyp \texttt{podmiotu zewnętrznego}, który reprezentuje indywidualne osoby zawierające umowy z firmą $\mathcal{F}$.
+%===
 \subsubsection{Opis związków encji}
-\subsection{Specyfikacja technologii}
+.
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+	\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|}
+\hline
+\textbf{L.p.} & Nazwa encji 1. & Nazwa encji 2. & Nazwa & Typ & Krotność & \textbf{Opis} \\ \hline
+1. & Dział & Pracownik & "składa się z..." & jednostronnie obligatoryjna & $1$-$n$ & Każdy dział posiada wielu pracowników, ale istnieją pracownicy, którzy nie posiadają działu. \\ \hline
+2. & Pracownik & Katalog informacji & "ma dostęp..." & jednostronnie opcjonalna & $1$-$n$ & Pracownik może posiadać dostęp do katalogu informacji, ale nie istnieją katalogi, do których nikt nie ma dostępu. \\ \hline
+3. & Katalog informacji & Katalog osób & "zawiera..." & jednostronnie obligatoryjna & $1$-$n$ & Katalog informacji może składać się z wielu katalogów osób. \\ \hline
+4. & Katalog informacji & Katalog umów & "zawiera..." & jednostronnie obligatoryjna & $1$-$n$ & Katalog informacji może składać się z wielu katalogów umów. \\ \hline
+5. & Katalog osób & Osoba uprawniona & "składa się z..." & obustronnie obligatoryjna & $1$-$n$ & Katalog osób składa się z wielu osób uprawnionych do przeglądania danych w obrębie interakcji z podmiotem zewnętrznym. \\ \hline
+6. & Katalog umów & Umowa & "gromadzi..." & obustronnie obligatoryjna & $1$-$n$ & Katalog umów gromadzi wielu umów, które są podpisywane z podmiotem zewnętrznym. \\ \hline
+7. & Umowa & Pozycja & "posiada..." & obustronnie obligatoryjna & $1$-$n$ & Umowa posiada co najmniej jedną pozycję. \\ \hline
+8. & Umowa & Podmiot zewnętrzny & "jest podpisana z..." & jednostronnie obligatoryjna & $1$-$n$ & Podmiot zewnętrzny może podpisać umowę z firmą. \\ \hline
+9. & Rodzaj uprawnienia & Osoba uprawniona & "jest przydzialny.." & jednostronnie obligatoryjna & $1$-$n$ & Rodzaj uprawnień jest przydzielany do wielu osób uprawnionych składowanych w katalogu osób. \\ \hline
+10. & Rodzaj umowy & Umowa & "jest..." & jednostronnie obligatoryjna & $1$-$n$ & Rodzaj umowy jest przydzielany do wielu umów składowanych w katalogu umów. \\ \hline
+\end{tabular}%
+}
+\label{tab-er1}
+\caption{Tabela zawierająca opisy związków encji.}
+\end{table}
 \section{Etap 1.\label{s1}}
 \subsection{Analiza wymagań}
 \subsubsection{Wymagania funkcjonalne}
+\paragraph{Wprowadzanie danych\\}
+W tabeli (\ref{tab1}) opisane są wymagania dotyczące możliwości udostępnianych przez system w ramach operacji tworzenia, edycji lub usunięcia danych. Zakłada się, że system udostępnia
+dostęp do spisanych w tabeli funkcji na podstawie poziomu uprawnień, stanowiska oraz działu.
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{L.p.} & \textbf{Nazwa}        & \textbf{Opis}                                                                          & \textbf{Priorytet} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Wprowadzanie danych}}                                                                                                  \\ \hline
+1.            & Dodawanie pracowników & System umożliwia wprowadzanie danych nowych pracowników.                               & 1                  \\ \hline
+2.            & Dodawanie umów        & System umożliwia wprowadzanie danych nowych umów                                       & 1                  \\ \hline
+3.            & Dodawanie podmiotów   & System umożliwia dodawanie nowych podmiotów zewnętrznych z którymi zawierane są umowy. & 1                  \\ \hline
+4.            & Usuwanie danych       & System umożliwia usuwanie danych, których przechowywanie nie jest już wymagane.        & 1                  \\ \hline
+5.            & Edycja danych         & System umożliwia edycję wprowadzonych danych.                                          & 2                  \\ \hline
+\end{tabular}%
+}
+\label{tab1}
+\caption{Tabela z opisem wymogów funkcjonalnych.}
+\end{table}
+\paragraph{Przegląd danych \\}
+Tabela (\ref{tab2}) zawiera opis oraz priorytet funkcji systemu związanych z przechowywaniem i przeglądem danych. Możliwe do przeglądania dane dotycząinterakcji biznesowych podjętych przez firmę $\mathcal{F}$ z podmiotami zewnętrznymi oraz metadane związane dotyczące liczby podmiotów zewnętrznych, liczby ich umów oraz osób uprawnionych.
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{L.p.} & \textbf{Nazwa}    & \textbf{Opis}                                                                                                           & \textbf{Priorytet} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Przechowywanie i przeglądanie danych}}                                                                                                              \\ \hline
+1.            & Przeglądanie umów & System pozwala na przeglądanie listy zawartych umów.                                                                    & 1                  \\ \hline
+2.            & Sortowanie umów   & System pozwala na posortowanie umów względem ich rodzaju, danych jakich dotyczą oraz podmiotu z którym zostały zawarte. & 2                  \\ \hline
+3.            & Przeglądanie osób & System pozwala na przeglądanie osób uprawnionych do przetwarzania lub przeglądania danych.                              & 1                  \\ \hline
+4.            & Sortowanie osób   & System pozwala na posortowanie listy osób po uprawnieniach jakie posiadają.                                             & 2                  \\ \hline
+\end{tabular}%
+}
+\label{tab2}
+\caption{Tabela z opisem wymogów funkcjonalnych.}
+\end{table}
+\paragraph{System uprawnień\\}
+W tabeli (\ref{tab3}) zebrane są opisy wymagań funkcjonalnych związanych z możliwościami manipulacji uprawnieniami, które posiadają użytkownicy.
+Podobnie jak przy wymaganiach (\ref{tab1}) zakłada się, że funkcje systemu opisane w tej tabeli dostępne są tylko dla pewnego podzbioru 
+użytkowników systemu.
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{L.p.} & \textbf{Nazwa}        & \textbf{Opis}                                                              & \textbf{Priorytet} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Uprawnienia}}                                                                                              \\ \hline
+1.            & Nadawanie uprawnień   & System pozwala na nadawanie użytkownikom różnych poziomów uprawnień        & 1                  \\ \hline
+2.            & Modyfikacja uprawnień & System pozwala na odbieranie użytkownikom uprawnień                        & 1                  \\ \hline
+3.            & Podgląd uprawnień     & System umożliwia wyświetlenie listy użytkowników wraz z ich uprawnieniami. & 1                  \\ \hline
+\end{tabular}%
+}
+\label{tab3}
+\caption{Tabela z opisem wymogów funkcjonalnych.}
+\end{table}
+\paragraph{Raportowanie\\}
+Opisane wymogi funkcjonalne systemu w tabeli (\ref{tab4}) dotyczą funkcji systemu dostarczanych w ramach aplikacji raportowej.  
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{L.p.} & \textbf{Nazwa}    & \textbf{Opis}                                                                                                 & \textbf{Priorytet} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Generowanie raportów}}                                                                                                                    \\ \hline
+1.            & Generacja raportu & System pozwala generować profilowane raporty tworzone na podstawie umów podpisanych przez podmioty zewnętrzne & 1                  \\ \hline
+2.            & Zapis raportu     & System umożliwia zapisanie raportu do jednego z dostępnych formatów zapisu dokumentów tekstowych              & 1                  \\ \hline
+3.            & Wczytanie raportu & System umożliwia wczytanie pliku o określonym formacie raportu                                                & 3                  \\ \hline
+\end{tabular}%
+}
+\label{tab4}
+\caption{Tabela z opisem wymogów funkcjonalnych.}
+\end{table}
+\paragraph{Konserwacja\\}
+Tabela (\ref{tab5}) zawiera opis funkcjonalności dotyczących konserwacji oraz zabezpieczenia danych gromadzonych w bazie danych.
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.5cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{L.p.} & \textbf{Nazwa}  & \textbf{Opis}                                                                                                                         & \textbf{Priorytet} \\ \hline
+\multicolumn{4}{|c|}{\textbf{Konserwacja danych}}                                                                                                                                            \\ \hline
+1.            & Tworzenie kopii & System na żądanie użytkownika z odpowiednim poziomem uprawnień pozwala wykonać kopię zapasową zgromadzonych informacji w bazie danych & 1                  \\ \hline
+\end{tabular}%
+}
+\label{tab5}
+\caption{Tabela z opisem wymogów funkcjonalnych.}
+\end{table}
 \subsubsection{Wymagania niefunkcjonalne}
+W poniższej tabeli (\ref{tab6}) znajduje się opis najważniejszych wymagań niefunkcjonalnych, które wyłoniły się w trakcie analizy systemowej.
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{L.p.} & \textbf{Nazwa}                 & \textbf{Opis}                                                                                                                                                     & \textbf{Priorytet} \\ \hline
+1.            & Kopia zapasowa                 & System powinien zachowywać prawidłowy stan przechowywanych informacji pomimo awarii baz danych.                                                                   & 1                  \\ \hline
+2.            & Intuicyjny interface aplikacji & System powinien mieć intuicyjny interface, tj. taki że użytkownik po dwudniowym szkoleniu będzie mógł opanować jego funkcje.                                      & 3                  \\ \hline
+3.            & Dostępność systemu             & Maksymalny czas niesprawności systemu po awarii nie powinien przekroczyć 8 godzin.                                                                                & 2                  \\ \hline
+4.            & Bezpieczeństwo danych          & Dane użytkowników będą przechowywane w formie zaszyfrowanej.                                                                                                      & 1                  \\ \hline
+5.            & Sprawność                      & System powinien obsługiwać co najmniej 1000 użytkowników jednocześnie.                                                                                            & 2                  \\ \hline
+6.            & Testowalność                   & System posiada zbiór protokołów testowania poprawności działania komponentów. W przypadku naruszenia protokołu generowany jest stosowany komunikat informacyjny.  & 3                  \\ \hline
+7.            & Wydajność odpowiedzi           & Górne ograniczenia oczekiwania użytkownika na odpowiedź systemu wynosi 3 sekundy.                                                                                 & 1                  \\ \hline
+8.            & Kompatybilość                  & Dostęp do dostarczanej aplikacji możliwy jest na platformach opartych o systemu z rodziny \textbackslash{}textit\{Windows\} oraz \textbackslash{}textit\{Linux\}. & 1                  \\ \hline
+\end{tabular}%
+}
+\label{tab6}
+\caption{Tabela z opisem wymogów niefunkcjonalnych.}
+\end{table}
 \subsection{Logiczny model danych}
+Na podstawie diagramu encji (\ref{er1}) został wygenerowany diagram logiczny, który znajduje się na rysunku (\ref{log1}). Diagram został doprowadzony do trzeciej postaci normalnej \texttt{3NF}.
 \subsubsection{diagram logiczny}
+\begin{figure}[H]
+			\centering
+
+			\includegraphics[width=1.10\textwidth]{/Users/warbarbye/Desktop/log1.png}
+					\label{log1}
+			\caption{Model logiczny.}
+\end{figure}
+
 \section{Etap 2. \label{s2}}
 \todo{etap 2 do 21.05}
 \subsection{Fizyczny model danych}
