@@ -24,7 +24,7 @@
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
-    linkcolor=violet,
+    linkcolor=blue,
     filecolor=magenta,      
     citecolor=blue,
     urlcolor=cyan,
@@ -121,7 +121,7 @@ Na rysunku (\ref{er1}) znajduje się powstały w ramach analizy systemowej diagr
 %%%%
 \paragraph{Nazwa encji:\\ }
 Dział
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \begin{tabular}{|l|l|l|l|}
 \hline
@@ -136,7 +136,7 @@ biznesowe z działami firmy i umowy są podpisywane między działami, a podmiot
 %%%%%%%%%%%%%%%%%
 \paragraph{Nazwa encji:\\ }
 Pracownik
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
 \begin{table}[H]
@@ -152,6 +152,7 @@ Stanowisko              & łańcuch znakowy & brak                  & Nazwa stan
 Poziom dostępu          & numeryczny      & Niepusty              & Liczba ze zbioru $\{1, 2, 3, 4, 5\}$, określająca poziom dostępu \\ \hline
 \end{tabular}%
 }
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Każdy \texttt{dział} składa się z pracowników, którzy wykonują w jego obrębie pewne zadania oraz posiadają dostęp do
@@ -160,7 +161,7 @@ umów, które są podpisywane między ich działem, a podmiotem zewnętrzym. \te
 %%%
 \paragraph{Nazwa encji:\\ }
 Katalog informacji
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -171,6 +172,8 @@ Nazwa katalogu          & łańcuch znakowy & Niepusty              & Znormalizo
 Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Encja \texttt{katalog informacji} jest kontenerem, w którym przechowywane są \texttt{katalogi umów} oraz \texttt{katalogi osób}, które są upoważnione do przetwarzania danych. Jeden \texttt{katalog informacji} jest zakładany dla \texttt{podmiotu zewnętrznego}.
@@ -178,7 +181,7 @@ Encja \texttt{katalog informacji} jest kontenerem, w którym przechowywane są \
 %%%
 \paragraph{Nazwa encji:\\ }
 Katalog umów
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -189,6 +192,8 @@ Wymagany poziom dostępu & numeryczny      & Niepusty              & Minimalny p
 Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Encja \texttt{katalog umów} jest kontenerem, który gromadzi \texttt{umowy} zawierane między firmą $\mathcal{F}$, a 
@@ -197,7 +202,7 @@ Encja \texttt{katalog umów} jest kontenerem, który gromadzi \texttt{umowy} zaw
 %%%
 \paragraph{Nazwa encji:\\ }
 Katalog osób
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -208,6 +213,8 @@ Wymagany poziom dostępu & numeryczny      & Niepusty              & Minimalny p
 Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Encja \texttt{katalog osób} jest kontenerem, który gromadzi \texttt{osoby uprawnione} -- w funkcji rodzaju uprawnienia odpowiednio -- do przeglądania/przetwarzania/modyfikacji danych, które zawierają \texttt{umowy}. 
@@ -215,7 +222,7 @@ Encja \texttt{katalog osób} jest kontenerem, który gromadzi \texttt{osoby upra
 %%%
 \paragraph{Nazwa encji:\\ }
 Osoba uprawniona
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -226,13 +233,15 @@ Imię                    & łańcuch znakowy & Niepusty              & Imię oso
 Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko osoby uprawnionej      \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Encja \texttt{osoba uprawniona} opisuje osobę, która może dokonać pewnych operacji na danych udostępnianych w ramach pewnej \texttt{umowy}. Może to być osoba, która jest \texttt{pracownikiem} firmy $\mathcal{F}$ lub jest reprezentantem \texttt{podmiotu zewnętrznego}.  
 %====%%%%
 \paragraph{Nazwa encji:\\ }
 Rodzaj uprawnienia
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -242,6 +251,8 @@ Rodzaj uprawnienia      & łańcuch znakowy & Niepusty              & Dostępne 
 Opis                    & łańcuch znakowy & Niepusty              & Opis uprawnienia, tj. opis czynności, które może podjąć osoba posiadające je \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 
 \paragraph{Opis encji: \\}
@@ -250,7 +261,7 @@ Encja słownikowa, która zawiera dostępne rodzaje uprawnień do danych oraz ic
 %%%
 \paragraph{Nazwa encji:\\ }
 Umowa
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -260,6 +271,8 @@ Id umowy                & numeryczny      & Unikalny i niepusty   & Unikalny ide
 Nazwa umowy             & łańcuch znakowy & Niepusty              & Znormalizowana nazwa umowy   \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Encja reprezentująca umowę podpisywaną między firmą $\mathcal{F}$ oraz \texttt{podmiotem zewnętrznym}. \texttt{Umowa} składa sie z pozycji o różnej treści. 
@@ -267,7 +280,7 @@ Encja reprezentująca umowę podpisywaną między firmą $\mathcal{F}$ oraz \tex
 %%%
 \paragraph{Nazwa encji:\\ }
 Pozycja
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
@@ -278,6 +291,8 @@ Nazwa pozycji           & łańcuch znakowy      & Unikalny i niepusty   & Nazwa
 Treść pozycji          & łańcuch znakowy & Niepusty              & Treść pozycji danej umowy \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Składowa \texttt{umowy} o określonej nazwie oraz treści. 
@@ -285,7 +300,7 @@ Składowa \texttt{umowy} o określonej nazwie oraz treści.
 %%%
 \paragraph{Nazwa encji:\\ }
 Rodzaj umowy
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
@@ -295,6 +310,8 @@ Rodzaj umowy
 Rodzaj umowy            & łańcuch znakowy & Niepusty              & Rodzaje umów jakie może zawierać podmiot zewnętrzny z firmą \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Encja słownikowa, która zawiera możliwe rodzaje umów, które są podpisywane między firmą $\mathcal{F}$, a \texttt{podmiotami zewnętrznymi}.
@@ -302,7 +319,7 @@ Encja słownikowa, która zawiera możliwe rodzaje umów, które są podpisywane
 %%%
 \paragraph{Nazwa encji:\\ }
 Podmiot zewnętrzy
-\paragraph{Atrybuty:\\}
+\paragraph{Atrybuty\\}
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -312,6 +329,8 @@ Id podmiotu             & numeryczny      & Unikalny i niepusty   & Identyfikato
 Status prawny           & łańcuch znakowy & Niepusty              & Podmiot prywatny lub podmiot prawny                          \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Jest to byt, który zawarł umowę z firmą $\mathcal{F}$ i zawiera dostęp katalogu swoich umów oraz osób uprawnionych do tych umów. 
@@ -319,7 +338,7 @@ Jest to byt, który zawarł umowę z firmą $\mathcal{F}$ i zawiera dostęp kata
 %%%
 \paragraph{Nazwa encji:\\ }
 Osoba prawna
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -330,6 +349,8 @@ REGON                   & łańcuch znakowy & Unikalny              & Numer REGO
 Nazwa                   & łańcuch znakowy & Niepusty              & Nazwa podmiotu prawnego       \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Podtyp \texttt{podmiotu zewnętrznego}, który reprezentuje podmioty prawne niebędące osobami fizycznymi zawierające umowy z firmą $\mathcal{F}$.
@@ -337,7 +358,7 @@ Podtyp \texttt{podmiotu zewnętrznego}, który reprezentuje podmioty prawne nieb
 %%%
 \paragraph{Nazwa encji:\\ }
 Osoba fizyczna
-\paragraph{Atrybuty:\\ }
+\paragraph{Atrybuty\\ }
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
@@ -348,12 +369,13 @@ Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko o
 PESEL                   & łańcuch znakowy & Unikalny i niepusty   & Numer PESEL osoby        \\ \hline
 \end{tabular}%
 }
+
+\caption{Tabela z opisem encji.} 
 \end{table}
 \paragraph{Opis encji: \\}
 Podtyp \texttt{podmiotu zewnętrznego}, który reprezentuje indywidualne osoby zawierające umowy z firmą $\mathcal{F}$.
 %===
 \subsubsection{Opis związków encji}
-.
 \begin{table}[H]
 \resizebox{\textwidth}{!}{%
 	\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|}
@@ -499,7 +521,7 @@ Na podstawie diagramu encji (\ref{er1}) został wygenerowany diagram logiczny, k
 \subsection{Implementacja bazy danych}
 \subsection{Procedura generowania danych testowych}
 \subsection{Scenariusz testów}
-\section{Etap3. \label{s3}}
+\section{Etap 3. \label{s3}}
 \todo{etap 3 do 11.06}
 \subsection{Implementacja aplikacji dostępowej oraz raportowej}
 \subsection{Wyniki testów}
