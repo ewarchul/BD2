@@ -12,11 +12,3 @@
 \BOOKMARK [3][-]{subsubsection.4.1.2}{Wymagania niefunkcjonalne}{subsection.4.1}% 12
 \BOOKMARK [2][-]{subsection.4.2}{Logiczny model danych}{section.4}% 13
 \BOOKMARK [3][-]{subsubsection.4.2.1}{diagram logiczny}{subsection.4.2}% 14
-\BOOKMARK [1][-]{section.5}{Etap 2. }{}% 15
-\BOOKMARK [2][-]{subsection.5.1}{Fizyczny model danych}{section.5}% 16
-\BOOKMARK [2][-]{subsection.5.2}{Implementacja bazy danych}{section.5}% 17
-\BOOKMARK [2][-]{subsection.5.3}{Procedura generowania danych testowych}{section.5}% 18
-\BOOKMARK [2][-]{subsection.5.4}{Scenariusz test\363w}{section.5}% 19
-\BOOKMARK [1][-]{section.6}{Etap 3. }{}% 20
-\BOOKMARK [2][-]{subsection.6.1}{Implementacja aplikacji dostepowej oraz raportowej}{section.6}% 21
-\BOOKMARK [2][-]{subsection.6.2}{Wyniki test\363w}{section.6}% 22

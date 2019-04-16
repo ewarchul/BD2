@@ -113,7 +113,7 @@ W celu realizacji projektu zakłada się, że system powstaje na potrzeby firmy 
 Na rysunku (\ref{er1}) znajduje się powstały w ramach analizy systemowej diagram E-R. Kolorem zielonym zostały oznaczone encje słownikowe.
 \begin{figure}[H]
 			\centering
-			\includegraphics[width=1.10\textwidth]{/Users/warbarbye/Desktop/er2.png}
+			\includegraphics[width=1.10\textwidth]{/Users/warbarbye/Desktop/er3.png}
 			\label{er1}
 			\caption{Diagram E-R.}
 \end{figure}
@@ -147,7 +147,7 @@ Pracownik
 Id pracownika           & numeryczny      & Unikalny i niepusty   & Identyfikator pracownika w obrębie działu                        \\ \hline
 Imię                    & łańcuch znakowy & Niepusty              & Imię pracownika                                                  \\ \hline
 Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko pracownika                                              \\ \hline
-PESEL                   & łańcuch znakowy & Unikalny              & Numer PESEL pracownika                                           \\ \hline
+PESEL                   & numeryczny & Unikalny              & Numer PESEL pracownika                                           \\ \hline
 Stanowisko              & łańcuch znakowy & brak                  & Nazwa stanowiska zajmowanego przez pracownika                    \\ \hline
 Poziom dostępu          & numeryczny      & Niepusty              & Liczba ze zbioru $\{1, 2, 3, 4, 5\}$, określająca poziom dostępu \\ \hline
 \end{tabular}%
@@ -169,14 +169,27 @@ Katalog informacji
 \textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
 Id katalogu             & numeryczny      & Unikalny i niepusty   & Identyfikator katalogu                             \\ \hline
 Nazwa katalogu          & łańcuch znakowy & Niepusty              & Znormalizowana nazwa katalogu.                     \\ \hline
-Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
+Data utworzenia         & data & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
 \end{tabular}%
 }
 
 \caption{Tabela z opisem encji.} 
 \end{table}
+\paragraph{Nazwa encji:\\ }
+Uprawnienie
+\paragraph{Atrybuty\\ }
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
+Id uprawnienia               & numeryczny      & Unikalny i niepusty   & Identyfikator uprawnienia jakie posiada pracownik  \\ \hline
+poziom dostępu            & numeryczny & Niepusty              & Poziom dostępu do katalogu informacji jaki posiada pracownik  \\ \hline
+\end{tabular}
+}
+\end{table}
 \paragraph{Opis encji: \\}
-Encja \texttt{katalog informacji} jest kontenerem, w którym przechowywane są \texttt{katalogi umów} oraz \texttt{katalogi osób}, które są upoważnione do przetwarzania danych. Jeden \texttt{katalog informacji} jest zakładany dla \texttt{podmiotu zewnętrznego}.
+Encja \texttt{uprawnienie} opisuje poziom dostępu \texttt{pracownika} do \texttt{katalogu informacji}. 
 %====
 %%%
 \paragraph{Nazwa encji:\\ }
@@ -189,7 +202,7 @@ Katalog umów
 \textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
 Id katalogu umów        & numeryczny      & Unikalny i niepusty   & Identyfikator katalogu umów                        \\ \hline
 Wymagany poziom dostępu & numeryczny      & Niepusty              & Minimalny poziom dostępu pracownika do umowy       \\ \hline
-Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
+Data utworzenia         & data & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
 \end{tabular}%
 }
 
@@ -210,7 +223,7 @@ Katalog osób
 \textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                                      \\ \hline
 Id katalogu osób        & numeryczny      & Unikalny i niepusty   & Identyfikator katalogu osób                        \\ \hline
 Wymagany poziom dostępu & numeryczny      & Niepusty              & Minimalny poziom dostępu pracownika do umowy       \\ \hline
-Data utworzenia         & łańcuch znakowy & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
+Data utworzenia         & data  & Niepusty              & Data utworzenia katalogu dla podmiotu zewnętrznego \\ \hline
 \end{tabular}%
 }
 
@@ -344,8 +357,8 @@ Osoba prawna
 \begin{tabular}{|l|l|l|l|}
 \hline
 \textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}                 \\ \hline
-NIP                     & łańcuch znakowy & Unikalny i niepusty   & Numer NIP podmiotu prawnego   \\ \hline
-REGON                   & łańcuch znakowy & Unikalny              & Numer REGON podmiotu prawnego \\ \hline
+NIP                     & numeryczny & Unikalny i niepusty   & Numer NIP podmiotu prawnego   \\ \hline
+REGON                   & numeryczny & Unikalny              & Numer REGON podmiotu prawnego \\ \hline
 Nazwa                   & łańcuch znakowy & Niepusty              & Nazwa podmiotu prawnego       \\ \hline
 \end{tabular}%
 }
@@ -366,7 +379,7 @@ Osoba fizyczna
 \textbf{Nazwa atrybutu} & \textbf{Typ}    & \textbf{Ograniczenia} & \textbf{Opis}            \\ \hline
 Imię                    & łańcuch znakowy & Niepusty              & Imię osoby fizycznej     \\ \hline
 Nazwisko                & łańcuch znakowy & Niepusty              & Nazwisko osoby fizycznej \\ \hline
-PESEL                   & łańcuch znakowy & Unikalny i niepusty   & Numer PESEL osoby        \\ \hline
+PESEL                   & numeryczny & Unikalny i niepusty   & Numer PESEL osoby        \\ \hline
 \end{tabular}%
 }
 
@@ -381,16 +394,19 @@ Podtyp \texttt{podmiotu zewnętrznego}, który reprezentuje indywidualne osoby z
 	\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|}
 \hline
 \textbf{L.p.} & Nazwa encji 1. & Nazwa encji 2. & Nazwa & Typ & Krotność & \textbf{Opis} \\ \hline
-1. & Dział & Pracownik & "składa się z..." & jednostronnie obligatoryjna & $1$-$n$ & Każdy dział posiada wielu pracowników, ale istnieją pracownicy, którzy nie posiadają działu. \\ \hline
-2. & Pracownik & Katalog informacji & "ma dostęp..." & jednostronnie opcjonalna & $1$-$n$ & Pracownik może posiadać dostęp do katalogu informacji, ale nie istnieją katalogi, do których nikt nie ma dostępu. \\ \hline
-3. & Katalog informacji & Katalog osób & "zawiera..." & jednostronnie obligatoryjna & $1$-$n$ & Katalog informacji może składać się z wielu katalogów osób. \\ \hline
-4. & Katalog informacji & Katalog umów & "zawiera..." & jednostronnie obligatoryjna & $1$-$n$ & Katalog informacji może składać się z wielu katalogów umów. \\ \hline
-5. & Katalog osób & Osoba uprawniona & "składa się z..." & obustronnie obligatoryjna & $1$-$n$ & Katalog osób składa się z wielu osób uprawnionych do przeglądania danych w obrębie interakcji z podmiotem zewnętrznym. \\ \hline
-6. & Katalog umów & Umowa & "gromadzi..." & obustronnie obligatoryjna & $1$-$n$ & Katalog umów gromadzi wielu umów, które są podpisywane z podmiotem zewnętrznym. \\ \hline
-7. & Umowa & Pozycja & "posiada..." & obustronnie obligatoryjna & $1$-$n$ & Umowa posiada co najmniej jedną pozycję. \\ \hline
-8. & Umowa & Podmiot zewnętrzny & "jest podpisana z..." & jednostronnie obligatoryjna & $1$-$n$ & Podmiot zewnętrzny może podpisać umowę z firmą. \\ \hline
-9. & Rodzaj uprawnienia & Osoba uprawniona & "jest przydzialny.." & jednostronnie obligatoryjna & $1$-$n$ & Rodzaj uprawnień jest przydzielany do wielu osób uprawnionych składowanych w katalogu osób. \\ \hline
-10. & Rodzaj umowy & Umowa & "jest..." & jednostronnie obligatoryjna & $1$-$n$ & Rodzaj umowy jest przydzielany do wielu umów składowanych w katalogu umów. \\ \hline
+1. & Dział & Pracownik & "składa się z..." & jednostronnie obligatoryjna & $1$-$n$ & Każdy pracownik jest przypisany do działu, ale istnieją działy, którzy nie posiadają pracowników. \\ \hline
+2. & Katalog informacji & Katalog osób & "zawiera..." & jednostronnie obligatoryjna & $1$-$n$ & Katalog informacji może składać się z wielu katalogów osób. \\ \hline
+3. & Katalog informacji & Katalog umów & "zawiera..." & jednostronnie obligatoryjna & $1$-$n$ & Katalog informacji może składać się z wielu katalogów umów. \\ \hline
+4. & Katalog osób & Osoba uprawniona & "składa się z..." & obustronnie obligatoryjna & $1$-$n$ & Katalog osób składa się z wielu osób uprawnionych do przeglądania danych w obrębie interakcji z podmiotem zewnętrznym. \\ \hline
+5. & Katalog umów & Umowa & "gromadzi..." & obustronnie obligatoryjna & $1$-$n$ & Katalog umów gromadzi wielu umów, które są podpisywane z podmiotem zewnętrznym. \\ \hline
+6. & Umowa & Pozycja & "posiada..." & obustronnie obligatoryjna & $1$-$n$ & Umowa posiada co najmniej jedną pozycję. \\ \hline
+7. & Umowa & Podmiot zewnętrzny & "jest podpisana z..." & jednostronnie obligatoryjna & $1$-$n$ & Podmiot zewnętrzny może podpisać umowę z firmą. \\ \hline
+8. & Rodzaj uprawnienia & Osoba uprawniona & "jest przydzialny.." & jednostronnie obligatoryjna & $1$-$n$ & Rodzaj uprawnień jest przydzielany do wielu osób uprawnionych składowanych w katalogu osób. \\ \hline
+9. & Rodzaj umowy & Umowa & "jest..." & jednostronnie obligatoryjna & $1$-$n$ & Rodzaj umowy jest przydzielany do wielu umów składowanych w katalogu umów. \\ \hline
+10. & Pracownik & Uprawnienie & "posiada..." & jednostronnie obligatoryjna & $1$-$n$ & Każdy pracownik może mieć nadane uprwanienie do katalogu informacji. \\ \hline
+11. & Uprawnienie & Katalog informacji & "ma..." & obustronnie obligatoryjna & $1$-$n$ & Każdy katalog informacji ma określone wymagane uprawnienia, aby uzyskać do niego dostęp. \\ \hline 
+
+
 \end{tabular}%
 }
 \label{tab-er1}
@@ -510,19 +526,19 @@ Na podstawie diagramu encji (\ref{er1}) został wygenerowany diagram logiczny, k
 \begin{figure}[H]
 			\centering
 
-			\includegraphics[width=1.10\textwidth]{/Users/warbarbye/Desktop/log2.png}
+			\includegraphics[width=1.10\textwidth]{/Users/warbarbye/Desktop/log3.png}
 					\label{log1}
 			\caption{Model logiczny.}
 \end{figure}
 
-\section{Etap 2. \label{s2}}
-\todo{etap 2 do 21.05}
-\subsection{Fizyczny model danych}
-\subsection{Implementacja bazy danych}
-\subsection{Procedura generowania danych testowych}
-\subsection{Scenariusz testów}
-\section{Etap 3. \label{s3}}
-\todo{etap 3 do 11.06}
-\subsection{Implementacja aplikacji dostępowej oraz raportowej}
-\subsection{Wyniki testów}
+%\section{Etap 2. \label{s2}}
+%\todo{etap 2 do 21.05}
+%\subsection{Fizyczny model danych}
+%\subsection{Implementacja bazy danych}
+%\subsection{Procedura generowania danych testowych}
+%\subsection{Scenariusz testów}
+%\section{Etap 3. \label{s3}}
+%\todo{etap 3 do 11.06}
+%\subsection{Implementacja aplikacji dostępowej oraz raportowej}
+%\subsection{Wyniki testów}
 \end{document}
