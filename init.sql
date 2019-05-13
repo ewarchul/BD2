@@ -20,7 +20,7 @@ CREATE TABLE pracownik(
 	id_pracownika INTEGER PRIMARY KEY,
 	imie CLOB,
 	nazwisko CLOB,
-	pesel CHARACTER(11),
+	pesel CHARACTER(11) CHECK(length(pesel) == 11),
 	stanowisko CLOB,
 	poziom_dostepu INTEGER,
 	id_dzialu INTEGER,
@@ -140,9 +140,9 @@ CREATE TABLE pozycja(
 DROP TABLE IF EXISTS organizacja;
 CREATE TABLE organizacja(
 	id_podmiotu INTEGER PRIMARY KEY,
-	nip CHAR(10),
+	nip CHAR(10) CHECK(length(nip) == 10),
 	nazwa CLOB,
-	regon CHAR(14),
+	regon CHAR(14) CHECK(length(regon) == 9 or length(regon) == 14),
 	CONSTRAINT osoba_prawna_podmiot_zewnetrzny_fk
 		FOREIGN KEY (id_podmiotu)
 		REFERENCES podmiot_zewnetrzny(id_podmiotu)
@@ -153,7 +153,7 @@ CREATE TABLE osoba_fizyczna(
 	id_podmiotu INTEGER PRIMARY KEY,
 	imie CLOB,
 	nazwisko CLOB,
-	pesel CHAR(11),
+	pesel CHAR(11) CHECK(length(pesel) == 11),
 	CONSTRAINT osoba_fizyczna_podmiot_zewnetrzny_fk
 		FOREIGN KEY (id_podmiotu)
 		REFERENCES podmiot_zewnetrzny(id_podmiotu)
