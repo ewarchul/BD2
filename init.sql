@@ -125,6 +125,7 @@ CREATE TABLE umowa(
 		FOREIGN KEY (podmiot_zewnetrzny_id_podmiotu)
 		REFERENCES podmiot_zewnetrzny(id_podmiotu)
 );
+CREATE INDEX umowa_podmiot_zewnetrzny_idx ON umowa(podmiot_zewnetrzny_id_podmiotu)
 
 DROP TABLE IF EXISTS pozycja;
 CREATE TABLE pozycja(
@@ -136,6 +137,8 @@ CREATE TABLE pozycja(
 		FOREIGN KEY (id_umowy)
 		REFERENCES umowa(id_umowy)
 );
+CREATE INDEX pozycja_id_umowy_idx ON pozycja(id_umowy)
+
 
 DROP TABLE IF EXISTS organizacja;
 CREATE TABLE organizacja(
