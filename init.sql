@@ -125,7 +125,7 @@ CREATE TABLE umowa(
 		FOREIGN KEY (podmiot_zewnetrzny_id_podmiotu)
 		REFERENCES podmiot_zewnetrzny(id_podmiotu)
 );
-CREATE INDEX umowa_podmiot_zewnetrzny_idx ON umowa(podmiot_zewnetrzny_id_podmiotu)
+CREATE INDEX umowa_podmiot_zewnetrzny_idx ON umowa(podmiot_zewnetrzny_id_podmiotu);
 
 DROP TABLE IF EXISTS pozycja;
 CREATE TABLE pozycja(
@@ -137,7 +137,7 @@ CREATE TABLE pozycja(
 		FOREIGN KEY (id_umowy)
 		REFERENCES umowa(id_umowy)
 );
-CREATE INDEX pozycja_id_umowy_idx ON pozycja(id_umowy)
+CREATE INDEX pozycja_id_umowy_idx ON pozycja(id_umowy);
 
 
 DROP TABLE IF EXISTS organizacja;
@@ -165,7 +165,7 @@ CREATE TABLE osoba_fizyczna(
 INSERT INTO dzial(id_dzialu, nazwa_dzialu) VALUES(1, "dummy dzial");
 INSERT INTO pracownik(id_pracownika, imie, id_dzialu) VALUES(1, "dummy pracownik", 1);
 
-CREATE TRIGGER after_pracownik_delete AFTER DELETE on pracownik
+CREATE TRIGGER after_pracownik_delete2 AFTER DELETE on pracownik
 BEGIN
-	UPDATE uprawnienie SET id_pracownika=1 wHERE id_pracownika = OLD.id
+	UPDATE uprawnienie SET id_pracownika=1 wHERE id_pracownika = OLD.id_pracownika;
 END;
