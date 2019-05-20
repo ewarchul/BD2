@@ -103,9 +103,7 @@ CREATE TABLE rodzaj_umowy(
 
 DROP TABLE IF EXISTS podmiot_zewnetrzny;
 CREATE TABLE podmiot_zewnetrzny(
-	id_podmiotu INTEGER PRIMARY KEY,
-	status_prawny CLOB,
-	typ CLOB
+	id_podmiotu INTEGER PRIMARY KEY
 );
 
 DROP TABLE IF EXISTS umowa;
