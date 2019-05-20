@@ -29,13 +29,6 @@ CREATE TABLE pracownik(
 		REFERENCES dzial(id_dzialu)
 );
 
-DROP TABLE IF EXISTS katalog_informacji;
-CREATE TABLE katalog_informacji(
-	id_katalogu INTEGER PRIMARY KEY,
-	nazwa_katalogu CLOB,
-	data_utworzenia TEXT
-);
-
 DROP TABLE IF EXISTS uprawnienie;
 CREATE TABLE uprawnienie(
 	id_uprawnienia INTEGER PRIMARY KEY,
