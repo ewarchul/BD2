@@ -84,17 +84,6 @@ CREATE TABLE osoba_uprawniona(
 		REFERENCES rodzaj_uprawnienia(rodzaj_uprawnienia)
 );
 
-DROP TABLE IF EXISTS katalog_umow;
-CREATE TABLE katalog_umow(
-	id_katalogu_umow INTEGER PRIMARY KEY,
-	data_utworzenia TEXT,
-	wymagany_poziom_dostepu INTEGER DEFAULT 1,
-	id_katalogu INTEGER,
-	CONSTRAINT katalog_umow_katalog_informacji_fk
-		FOREIGN KEY (id_katalogu_umow)
-		REFERENCES katalog_informacji(id_katalogu)
-);
-
 DROP TABLE IF EXISTS rodzaj_umowy;
 CREATE TABLE rodzaj_umowy(
 	id INTEGER PRIMARY KEY,
@@ -113,6 +102,8 @@ CREATE TABLE umowa(
 	id_katalogu_umow INTEGER NOT NULL,
 	podmiot_zewnetrzny_id_podmiotu INTEGER NOT NULL,
 	rodzaj_umowy INTEGER NOT NULL,
+	data_utworzenia TEXT,
+	wymagany_poziom_dostepu INTEGER DEFAULT 1,
 	CONSTRAINT umowa_katalog_umow_fk
 		FOREIGN KEY (id_katalogu_umow)
 		REFERENCES katalog_umow(id_katalogu_umow),
