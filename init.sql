@@ -11,7 +11,7 @@ CREATE TABLE pracownik(
 	id_pracownika INTEGER PRIMARY KEY,
 	imie CLOB,
 	nazwisko CLOB,
-	pesel CHARACTER(11) CHECK(length(pesel) == 11),
+	pesel CHARACTER(11) CHECK(length(pesel) == 11) UNIQUE,
 	stanowisko CLOB,
 	poziom_dostepu INTEGER,
 	id_dzialu INTEGER NOT NULL,
