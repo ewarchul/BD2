@@ -43,17 +43,6 @@ CREATE TABLE uprawnienie(
 		REFERENCES katalog_informacji(id_katalogu)
 );
 
-DROP TABLE IF EXISTS katalog_osob;
-CREATE TABLE katalog_osob(
-	id_katalogu_osob INTEGER PRIMARY KEY,
-	data_utworzenia TEXT,
-	wymagany_poziom_dostepu INTEGER DEFAULT 1,
-	id_katalogu INTEGER NOT NULL,
-	CONSTRAINT katalog_osob_katalog_informacji_fk
-		FOREIGN KEY (id_katalogu)
-		REFERENCES katalog_informacji(id_katalogu)
-);
-
 DROP TABLE IF EXISTS rodzaj_uprawnienia;
 CREATE TABLE rodzaj_uprawnienia(
 	rodzaj_uprawnienia INTEGER PRIMARY KEY,
@@ -68,7 +57,8 @@ CREATE TABLE osoba_uprawniona(
 	id_katalogu_osob INTEGER NOT NULL,
 	rodzaj_uprawnienia INTEGER NOT NULL,
 	nasz_pracownik CHAR(1),
-
+	data_dodania TEXT,
+	wymagany_poziom_dostepu INTEGER DEFAULT 1,
 	CONSTRAINT osoba_uprawniona_katalog_osob_fk
 		FOREIGN KEY (id_katalogu_osob)
 		REFERENCES katalog_osob(id_katalogu_osob)
