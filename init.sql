@@ -1,12 +1,3 @@
--- roznice wzg diagramu
--- 1) tabela pracownik, kolumna pesel jest tekstem
--- 2) tabela katalog_informacji nie ma kolumny id_pracownika (bo po co jej??)
--- 3) tabela osoba_uprawniona, kolumna rodzaj_uprawnienia_lp_uprawnienia i lp_uprawnienia duplikują rodzaj_uprawnienia, wiec ich nie ma
--- 4) tabela rodzaj_uprawnienia, lp_uprawnienia duplikuje rodzaj_uprawnienia
--- 5) czy w tabeli osoba_uprawniona kolumna id_umowy_upowazniajacej nie powinno byc FK?
--- 6) tabela umowa, kolumna lp powinna sie nazywac 'rodzaj umowy'?
-
-
 PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS dzial;
@@ -27,20 +18,6 @@ CREATE TABLE pracownik(
 	CONSTRAINT pracownik_dzial_fk
 		FOREIGN KEY (id_dzialu)
 		REFERENCES dzial(id_dzialu)
-);
-
-DROP TABLE IF EXISTS uprawnienie;
-CREATE TABLE uprawnienie(
-	id_uprawnienia INTEGER PRIMARY KEY,
-	poziom_dostepu INTEGER,
-	id_pracownika INTEGER NOT NULL,
-	id_umowy INTEGER NOT NULL,
-	CONSTRAINT uprawnienie_pracownik_fk
-		FOREIGN KEY (id_pracownika)
-		REFERENCES pracownik(id_pracownika)
-	CONSTRAINT uprawnienie_umowa_fk
-		FOREIGN KEY (id_umowy)
-		REFERENCES umowa(id_umowy)
 );
 
 DROP TABLE IF EXISTS rodzaj_uprawnienia;
@@ -128,14 +105,6 @@ CREATE TABLE osoba_fizyczna(
 		FOREIGN KEY (id_podmiotu)
 		REFERENCES podmiot_zewnetrzny(id_podmiotu)
 );
-
-INSERT INTO dzial(id_dzialu, nazwa_dzialu) VALUES(1, "dummy dzial");
-INSERT INTO pracownik(id_pracownika, imie, id_dzialu) VALUES(1, "dummy pracownik", 1);
-
-CREATE TRIGGER after_pracownik_delete AFTER DELETE on pracownik
-BEGIN
-	UPDATE uprawnienie SET id_pracownika=1 wHERE id_pracownika = OLD.id_pracownika;
-END;
 
 CREATE TRIGGER after_osoba_fizyczna_insert AFTER INSERT on osoba_fizyczna
 BEGIN
