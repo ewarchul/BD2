@@ -167,3 +167,13 @@ CREATE TRIGGER after_pracownik_delete AFTER DELETE on pracownik
 BEGIN
 	UPDATE uprawnienie SET id_pracownika=1 wHERE id_pracownika = OLD.id_pracownika;
 END;
+
+CREATE TRIGGER after_osoba_fizyczna_insert AFTER INSERT on osoba_fizyczna
+BEGIN
+	INSERT INTO podmiot_zewnetrzny(id_podmiotu) VALUES(NEW.id_podmiotu);
+END;
+
+CREATE TRIGGER after_organizacja_insert AFTER INSERT on organizacja
+BEGIN
+	INSERT INTO podmiot_zewnetrzny(id_podmiotu) VALUES(NEW.id_podmiotu);
+END;
