@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS katalog_osob;
 CREATE TABLE katalog_osob(
 	id_katalogu_osob INTEGER PRIMARY KEY,
 	data_utworzenia TEXT,
-	wymagany_poziom_dostepu INTEGER,
+	wymagany_poziom_dostepu INTEGER DEFAULT 1,
 	id_katalogu INTEGER NOT NULL,
 	CONSTRAINT katalog_osob_katalog_informacji_fk
 		FOREIGN KEY (id_katalogu)
@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS katalog_umow;
 CREATE TABLE katalog_umow(
 	id_katalogu_umow INTEGER PRIMARY KEY,
 	data_utworzenia TEXT,
-	wymagany_poziom_dostepu INTEGER,
+	wymagany_poziom_dostepu INTEGER DEFAULT 1,
 	id_katalogu INTEGER,
 	CONSTRAINT katalog_umow_katalog_informacji_fk
 		FOREIGN KEY (id_katalogu_umow)
