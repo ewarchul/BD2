@@ -163,7 +163,7 @@ CREATE TABLE osoba_fizyczna(
 INSERT INTO dzial(id_dzialu, nazwa_dzialu) VALUES(1, "dummy dzial");
 INSERT INTO pracownik(id_pracownika, imie, id_dzialu) VALUES(1, "dummy pracownik", 1);
 
-CREATE TRIGGER after_pracownik_delete2 AFTER DELETE on pracownik
+CREATE TRIGGER after_pracownik_delete AFTER DELETE on pracownik
 BEGIN
 	UPDATE uprawnienie SET id_pracownika=1 wHERE id_pracownika = OLD.id_pracownika;
 END;
