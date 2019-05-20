@@ -34,13 +34,13 @@ CREATE TABLE uprawnienie(
 	id_uprawnienia INTEGER PRIMARY KEY,
 	poziom_dostepu INTEGER,
 	id_pracownika INTEGER NOT NULL,
-	id_katalogu INTEGER NOT NULL,
+	id_umowy INTEGER NOT NULL,
 	CONSTRAINT uprawnienie_pracownik_fk
 		FOREIGN KEY (id_pracownika)
 		REFERENCES pracownik(id_pracownika)
-	CONSTRAINT uprawnienie_katalog_informacji_fk
-		FOREIGN KEY (id_katalogu)
-		REFERENCES katalog_informacji(id_katalogu)
+	CONSTRAINT uprawnienie_umowa_fk
+		FOREIGN KEY (id_umowy)
+		REFERENCES umowa(id_umowy)
 );
 
 DROP TABLE IF EXISTS rodzaj_uprawnienia;
@@ -54,14 +54,13 @@ CREATE TABLE osoba_uprawniona(
 	numer_osoby INTEGER PRIMARY KEY,
 	imie CLOB,
 	nazwisko CLOB,
-	id_katalogu_osob INTEGER NOT NULL,
+	id_umowy INTEGER NOT NULL,
 	rodzaj_uprawnienia INTEGER NOT NULL,
-	nasz_pracownik CHAR(1),
 	data_dodania TEXT,
 	wymagany_poziom_dostepu INTEGER DEFAULT 1,
-	CONSTRAINT osoba_uprawniona_katalog_osob_fk
-		FOREIGN KEY (id_katalogu_osob)
-		REFERENCES katalog_osob(id_katalogu_osob)
+	CONSTRAINT osoba_uprawniona_id_umowy_fk
+		FOREIGN KEY (id_umowy)
+		REFERENCES umowa(id_umowy)
 	CONSTRAINT osoba_uprawniona_rodzaj_uprawnienia_fk
 		FOREIGN KEY (rodzaj_uprawnienia)
 		REFERENCES rodzaj_uprawnienia(rodzaj_uprawnienia)
@@ -82,14 +81,10 @@ DROP TABLE IF EXISTS umowa;
 CREATE TABLE umowa(
 	id_umowy INTEGER PRIMARY KEY,
 	nazwa_umowy CLOB,
-	id_katalogu_umow INTEGER NOT NULL,
 	podmiot_zewnetrzny_id_podmiotu INTEGER NOT NULL,
 	rodzaj_umowy INTEGER NOT NULL,
 	data_utworzenia TEXT,
 	wymagany_poziom_dostepu INTEGER DEFAULT 1,
-	CONSTRAINT umowa_katalog_umow_fk
-		FOREIGN KEY (id_katalogu_umow)
-		REFERENCES katalog_umow(id_katalogu_umow),
 	CONSTRAINT umowa_rodzaj_umowy_fk
 		FOREIGN KEY (rodzaj_umowy)
 		REFERENCES rodzaj_umowy(id)
