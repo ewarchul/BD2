@@ -14,7 +14,7 @@ CREATE TABLE pracownik(
 	pesel CHARACTER(11) CHECK(length(pesel) == 11) UNIQUE,
 	stanowisko CLOB,
 	poziom_dostepu INTEGER,
-	aktywny CHAR(1)
+	aktywny CHAR(1),
 	id_dzialu INTEGER NOT NULL,
 	CONSTRAINT pracownik_dzial_fk
 		FOREIGN KEY (id_dzialu)
@@ -74,13 +74,14 @@ CREATE INDEX umowa_podmiot_zewnetrzny_idx ON umowa(podmiot_zewnetrzny_id_podmiot
 
 DROP TABLE IF EXISTS pozycja;
 CREATE TABLE pozycja(
-	id_pozycji INTEGER PRIMARY KEY,
+	id_pozycji INTEGER,
 	nazwa_pozycji CLOB,
 	tresc_pozycji CLOB,
 	id_umowy INTEGER NOT NULL,
 	CONSTRAINT pozycja_umowa_fk
 		FOREIGN KEY (id_umowy)
-		REFERENCES umowa(id_umowy)
+		REFERENCES umowa(id_umowy),
+	PRIMARY KEY(id_pozycji, id_umowy)
 );
 CREATE INDEX pozycja_id_umowy_idx ON pozycja(id_umowy);
 
