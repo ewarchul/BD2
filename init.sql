@@ -14,6 +14,7 @@ CREATE TABLE pracownik(
 	pesel CHARACTER(11) CHECK(length(pesel) == 11) UNIQUE,
 	stanowisko CLOB,
 	poziom_dostepu INTEGER,
+	aktywny CHAR(1)
 	id_dzialu INTEGER NOT NULL,
 	CONSTRAINT pracownik_dzial_fk
 		FOREIGN KEY (id_dzialu)
