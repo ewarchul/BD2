@@ -54,6 +54,7 @@ class App(QWidget):
         self.left = 100
         self.width = 500
         self.height = 500
+        self.setFixedSize(self.width, self.height)
         self.Log()
     def Log(self):
         self.setWindowTitle(self.title)
