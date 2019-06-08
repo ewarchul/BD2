@@ -1,6 +1,7 @@
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
 from PyQt5.QtWidgets import *#QTableView, QApplication
-from PyQt5 import QtCore#, QtGui
+#from PyQt5 import QtCore #, QtGui
+from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import sys
 
@@ -45,8 +46,31 @@ def findrow(i):
     delrow = i.row()
 
 
-class App(QWidget):
+class HelpWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Pomoc")
+        self.width = 300
+        self.height = 150
+        self.setFixedSize(self.width, self.height)
+        self.layout = QVBoxLayout()
+        self.label = QLabel("Kontakt: pomocny@pomocnik.ru")
+        self.layout.addWidget(self.label)
+        self.setLayout(self.layout)
 
+
+class App(QWidget):
+    @pyqtSlot()
+    def log_click(self):
+        print('Dzien dobry')
+    @pyqtSlot()
+    def exit_click(self):
+        exit()
+#    @pyqtSlot()
+    def help_click(self):
+        self.w = HelpWindow()
+        self.w.show()
+        self.hide()
     def __init__(self):
         super().__init__()
         self.title = 'Logowanie do systemu'
@@ -71,18 +95,20 @@ class App(QWidget):
         self.pw.setEchoMode(QLineEdit.Password)
         self.pw.move(100, 200)
         #self.db = QLineEdit(self)
-        btn = QPushButton('Zaloguj', self)
-        btn.setStyleSheet('QPushButton {background-color: red}')
-        btn.move(100, 300)
-        btn = QPushButton('Wyłącz aplikację', self)
-        btn.setStyleSheet('QPushButton {background-color: red}')
-        btn.move(100, 350)
-        btn = QPushButton('Pomoc', self)
-        btn.setStyleSheet('QPushButton {background-color: red}')
-        btn.move(100, 400)
+        log_btn = QPushButton('Zaloguj', self)
+        log_btn.setStyleSheet('QPushButton {background-color: red}')
+        log_btn.move(100, 300)
+        log_btn.clicked.connect(self.log_click)
+        exit_btn = QPushButton('Wyłącz aplikację', self)
+        exit_btn.setStyleSheet('QPushButton {background-color: red}')
+        exit_btn.move(100, 350)
+        exit_btn.clicked.connect(self.exit_click)
+        help_btn = QPushButton('Pomoc', self)
+        help_btn.setStyleSheet('QPushButton {background-color: red}')
+        help_btn.move(100, 400)
+        help_btn.clicked.connect(self.help_click)
         #btn.clicked.connect(self.SQL)
         self.show()
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
