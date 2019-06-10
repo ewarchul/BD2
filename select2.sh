@@ -6,7 +6,7 @@
 ID_PODMIOTU=1234
 MINIMALNA_ILOSC_POZYCJI_UMOWY=11
 DATA_OD='1800-01-01'
-DATA_DO='2099-01-01'
+DATA_DO='2010-01-01'
 
 
 sqlite3 mydb "
@@ -18,6 +18,8 @@ JOIN
 	umowa u ON p.id_umowy = u.id_umowy
 WHERE 
 	u.podmiot_zewnetrzny_id_podmiotu = $ID_PODMIOTU
+	AND u.data_utworzenia >= $DATA_OD
+	AND u.data_utworzenia <= $DATA_DO
 GROUP BY 
 	u.id_umowy
 HAVING 
