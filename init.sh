@@ -1,5 +1,6 @@
 #!/bin/bash
 BAZA=mydb
+rm $BAZA
 sqlite3 $BAZA < init.sql 
 (echo .separator ,; echo .import data/dzialy.csv dzial) | sqlite3 $BAZA
 (echo .separator ,; echo .import data/pracownicy.csv pracownik) | sqlite3 $BAZA
