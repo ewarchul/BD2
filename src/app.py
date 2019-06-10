@@ -46,7 +46,6 @@ class ViewWindow(QWidget):
                 query.prepare('select * from osoba_uprawniona where ' + key_val)
             else:
                 query.prepare('select * from osoba_uprawniona')
-            query.prepare('select * from osoba_uprawniona where ' + key_val)
         elif cur_txt == 'podmiot_zewnetrzny':
             query.prepare('select * from {} where {}')
         elif cur_txt == 'umowa':
