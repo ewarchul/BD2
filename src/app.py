@@ -6,6 +6,8 @@ from PyQt5.QtGui import *
 import sqlite3
 import sys
 import re
+from report_app import *
+
 def clearLayout(layout):
     for i in range(layout.count()): layout.itemAt(i).widget().close()
 class HelpWindow(QWidget):
@@ -22,8 +24,8 @@ class HelpWindow(QWidget):
 class ViewWindow(QWidget):
     @pyqtSlot()
     def make_query(self):
-        cur_txt = self.cur_txt 
-        db = QSqlDatabase.addDatabase('QSQLITE') 
+        cur_txt = self.cur_txt
+        db = QSqlDatabase.addDatabase('QSQLITE')
         print(cur_txt)
         db.setDatabaseName('mydbx')
         db.open()
@@ -50,7 +52,7 @@ class ViewWindow(QWidget):
         elif cur_txt == 'umowa':
             query.prepare('select * from {} where {}')
         elif cur_txt == 'dzial':
-            query.prepare('select * from dzial;') 
+            query.prepare('select * from dzial;')
         query.exec()
         model = QSqlQueryModel()
         model.setQuery(query)
@@ -151,8 +153,6 @@ class EditwWindow(QWidget):
         pass
 class DeleteWindow(QWidget):
         pass
-class ReportWindow(QWidget):
-        pass
 class MenuWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -181,10 +181,17 @@ class MenuWindow(QWidget):
         report_btn = QPushButton('Raport', self)
         report_btn.setStyleSheet('QPushButton {background-color: purple}')
         report_btn.move(80, 450)
+        report_btn.clicked.connect(self.rep_click)
+
     @pyqtSlot()
     def view_click(self):
         self.viewWin = ViewWindow()
         self.viewWin.show()
+
+    @pyqtSlot()
+    def rep_click(self):
+        self.repWin = ReportWindow()
+        self.repWin.show()
 class App(QWidget):
     @pyqtSlot()
     def exit_click(self):
@@ -202,7 +209,7 @@ class App(QWidget):
             QMessageBox.about(self, 'Komunikat', 'Niewłaściwa nazwa użytkownika lub hasło!')
         else:
             try:
-                connection = sqlite3.connect('sports.db') 
+                connection = sqlite3.connect('sports.db')
                 QMessageBox.about(self, 'Komunikat', 'Połączono z bazą danych.\nTwoje dane są następujące:\npoziom dostępu: {}\nnazwa konta: {}'.format(acc_lvl, login))
                 self.menu = MenuWindow()
                 self.menu.show()
@@ -249,7 +256,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = App()
     sys.exit(app.exec_())
-
-    
-
-
