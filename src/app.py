@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import sqlite3
 import sys
+import re
 def clearLayout(layout):
     for i in range(layout.count()): layout.itemAt(i).widget().close()
 class HelpWindow(QWidget):
@@ -29,9 +30,8 @@ class ViewWindow(QWidget):
         query = QSqlQuery(db)
         if cur_txt == 'pracownik':
             query_residual = 'poziom_dostepu = {} and imie = {} and nazwisko = {} and id_pracownika = {} and stanowisko = {} '.format(self.filter_acclvl.text(), self.filter_worker_name.text(), self.filter_worker_surname.text(), self.filter_worker_id.text(), self.filter_worker_job.text())
-            print(query_residual)
-            exit()
-            query.prepare('select * from pracownik where poziom_dostepu={};'.format(self.filter_acclvl.text())) 
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \w+' ,query_residual)))
+            query.prepare('select * from pracownik where ' + key_val)
         elif cur_txt == 'podmiot_zewnetrzny':
             query.prepare('select * from {} where {}')
         elif cur_txt == 'osoba_uprawniona':
