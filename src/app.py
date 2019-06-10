@@ -103,20 +103,16 @@ class MenuWindow(QWidget):
         pixmap = QPixmap('logo.jpg')
         self.logo.setPixmap(pixmap)
         self.logo.resize(650, 650)
-
         view_btn = QPushButton('Przegląd', self)
         view_btn.setStyleSheet('QPushButton {background-color: orange}')
         view_btn.move(80, 300)
         view_btn.clicked.connect(self.view_click)
-
         edit_btn = QPushButton('Edycja', self)
         edit_btn.setStyleSheet('QPushButton {background-color: green}')
         edit_btn.move(80, 350)
-
         delete_btn = QPushButton('Usunięcie', self)
         delete_btn.setStyleSheet('QPushButton {background-color: blue}')
         delete_btn.move(80, 400)
-
         report_btn = QPushButton('Raport', self)
         report_btn.setStyleSheet('QPushButton {background-color: purple}')
         report_btn.move(80, 450)
@@ -148,7 +144,6 @@ class App(QWidget):
                 self.hide()
             except:
                 QMessageBox.about(self, 'Komunikat', 'Nie udało się połączyć z bazą danych.')
-
     def __init__(self):
         super().__init__()
         self.title = 'Logowanie do systemu'
