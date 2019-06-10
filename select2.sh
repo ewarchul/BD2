@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# umowy zawarte z daną firmą w danym czasie + ilość pozycji w każdej umowie
+# umowy zawarte z daną firmą w danym czasie z minimalną ilością pozycji + ilość pozycji w każdej umowie
 
 # te dane powinny brac sie z GUI - teraz je zahardkodowałem w celach developerskich
 ID_PODMIOTU=1234
