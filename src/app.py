@@ -31,10 +31,21 @@ class ViewWindow(QWidget):
         if cur_txt == 'pracownik':
             query_residual = 'poziom_dostepu = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and id_pracownika = \'{}\' and stanowisko = \'{}\' '.format(self.filter_acclvl.text(), self.filter_worker_name.text(), self.filter_worker_surname.text(), self.filter_worker_id.text(), self.filter_worker_job.text())
             key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\w+\'' ,query_residual)))
-            query.prepare('select * from pracownik where ' + key_val)
-        elif cur_txt == 'podmiot_zewnetrzny':
-            query.prepare('select * from {} where {}')
+            print(key_val)
+            if(len(key_val)):
+                query.prepare('select * from pracownik where ' + key_val)
+            else:
+                query.prepare('select * from pracownik')
         elif cur_txt == 'osoba_uprawniona':
+            query_residual = 'wymagany_poziom_dostepu = \'{}\' and numer_osoby = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and rodzaj_uprawnienia = \'{}\' and data_dodania = \'{}\' '.format(self.filter_wymagany_acclvl.text(), self.filter_id.text(), self.filter_imie.text(), 
+                    self.filter_nazwisko.text(), self.filter_rodzaj_uprawnienia.text(), self.filter_data_dodania.text())
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\w+\'' ,query_residual)))
+            if(len(key_val)):
+                query.prepare('select * from osoba_uprawniona where ' + key_val)
+            else:
+                query.prepare('select * from osoba_uprawniona')
+            query.prepare('select * from osoba_uprawniona where ' + key_val)
+        elif cur_txt == 'podmiot_zewnetrzny':
             query.prepare('select * from {} where {}')
         elif cur_txt == 'umowa':
             query.prepare('select * from {} where {}')
