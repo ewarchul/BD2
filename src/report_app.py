@@ -8,37 +8,41 @@ class ReportWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.col1 = 0
-        self.col2 = 200
-        self.col3 = 400
+        self.col2 = 300
+        self.col3 = 600
+        self.text_width = 300
 
         self.title = 'Raport'
         self.top = 100
         self.left = 100
         self.width = 650
         self.height = 950
-        self.setFixedSize(self.width, self.height)
+        self.setBaseSize(self.width, self.height)
         self.setGeometry(self.top, self.left, self.height, self.width)
         self.logo = QLabel(self)
 
 #SELECT 1
         self.label_SELECT_1 = QLabel(self)
-        self.label_SELECT_1.setText("SELECT 1")
+        self.label_SELECT_1.setText("Filtr 1")
         self.label_SELECT_1.move(self.col1, 0)
         self.label_SELECT_1.show()
 
         self.text_ID_UMOWY = QLineEdit(self)
-        self.text_ID_UMOWY.setPlaceholderText('ID UMOWY')
+        self.text_ID_UMOWY.setPlaceholderText('ID UMOWY np. 23')
         self.text_ID_UMOWY.move(self.col1, 50)
+        self.text_ID_UMOWY.setFixedWidth(self.text_width)
         self.text_ID_UMOWY.show()
 
         self.text_CZY_KOBIETA = QLineEdit(self)
-        self.text_CZY_KOBIETA.setPlaceholderText('CZY KOBIETA?')
+        self.text_CZY_KOBIETA.setPlaceholderText('CZY KOBIETA? np.: false')
         self.text_CZY_KOBIETA.move(self.col1, 100)
+        self.text_CZY_KOBIETA.setFixedWidth(self.text_width)
         self.text_CZY_KOBIETA.show()
 
         self.text_DATA_DODANIA = QLineEdit(self)
-        self.text_DATA_DODANIA.setPlaceholderText('DATA DODANIA')
+        self.text_DATA_DODANIA.setPlaceholderText('DATA DODANIA np. 1994-01-01')
         self.text_DATA_DODANIA.move(self.col1, 150)
+        self.text_DATA_DODANIA.setFixedWidth(self.text_width)
         self.text_DATA_DODANIA.show()
 
         generate_1_btn = QPushButton('Generuj raport', self)
@@ -47,28 +51,32 @@ class ReportWindow(QWidget):
 
 # SELECT 2
         self.label_SELECT_2 = QLabel(self)
-        self.label_SELECT_2.setText("SELECT 2")
+        self.label_SELECT_2.setText("Filtr 2")
         self.label_SELECT_2.move(self.col2, 0)
         self.label_SELECT_2.show()
 
         self.text_ID_PODMIOTU = QLineEdit(self)
-        self.text_ID_PODMIOTU.setPlaceholderText('ID PODMIOTU')
+        self.text_ID_PODMIOTU.setPlaceholderText('ID PODMIOTU np.: 1234')
         self.text_ID_PODMIOTU.move(self.col2, 50)
+        self.text_ID_PODMIOTU.setFixedWidth(self.text_width)
         self.text_ID_PODMIOTU.show()
 
         self.text_MINIMALNA_ILOSC_POZYCJI_UMOWY = QLineEdit(self)
-        self.text_MINIMALNA_ILOSC_POZYCJI_UMOWY.setPlaceholderText('MINIMALNA ILOŚĆ POZYCJI UMOWY')
+        self.text_MINIMALNA_ILOSC_POZYCJI_UMOWY.setPlaceholderText('MIN. IL. POZ. UMOWY np.: 11')
         self.text_MINIMALNA_ILOSC_POZYCJI_UMOWY.move(self.col2, 100)
+        self.text_MINIMALNA_ILOSC_POZYCJI_UMOWY.setFixedWidth(self.text_width)
         self.text_MINIMALNA_ILOSC_POZYCJI_UMOWY.show()
 
         self.text_DATA_OD = QLineEdit(self)
-        self.text_DATA_OD.setPlaceholderText('DATA DO')
+        self.text_DATA_OD.setPlaceholderText('DATA DO np.: 1800-01-01')
         self.text_DATA_OD.move(self.col2, 150)
+        self.text_DATA_OD.setFixedWidth(self.text_width)
         self.text_DATA_OD.show()
 
         self.text_DATA_DO = QLineEdit(self)
-        self.text_DATA_DO.setPlaceholderText('DATA DO')
+        self.text_DATA_DO.setPlaceholderText('DATA DO np.: 2019-01-01')
         self.text_DATA_DO.move(self.col2, 200)
+        self.text_DATA_DO.setFixedWidth(self.text_width)
         self.text_DATA_DO.show()
 
         generate_2_btn = QPushButton('Generuj raport', self)
@@ -77,13 +85,14 @@ class ReportWindow(QWidget):
 
 # SELECT 3
         self.label_SELECT_3 = QLabel(self)
-        self.label_SELECT_3.setText("SELECT 3")
+        self.label_SELECT_3.setText("Filtr 3")
         self.label_SELECT_3.move(self.col3, 0)
         self.label_SELECT_3.show()
 
         self.text_ROK = QLineEdit(self)
-        self.text_ROK.setPlaceholderText('DATA D0')
+        self.text_ROK.setPlaceholderText('DATA DO np.: 2001')
         self.text_ROK.move(self.col3, 50)
+        self.text_ROK.setFixedWidth(self.text_width)
         self.text_ROK.show()
 
         generate_3_btn = QPushButton('Generuj raport', self)
