@@ -4,7 +4,6 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel, QSqlQueryModel
 from PyQt5.QtWidgets import *#QTableView, QApplication
 class ReportWindow(QWidget):
 
-
     def __init__(self):
         super().__init__()
         self.col1 = 0
@@ -143,7 +142,20 @@ class ReportWindow(QWidget):
         tableview.resizeColumnsToContents()
         tableview.move(0, 500)
         tableview.show()
+        db.close()
 
+        text = "\n\n"
+        m = tableview.model()
+        for i in range(m.columnCount()):
+            for j in range(m.rowCount()):
+                text += m.index(i, j).data() + " "
+            text += "\n"
+
+        print(text)
+
+        text_file = open("raport.txt", "w")
+        text_file.write(text)
+        text_file.close()
 
     @pyqtSlot()
     def generate_2_click(self):
@@ -180,7 +192,7 @@ class ReportWindow(QWidget):
         tableview.resizeColumnsToContents()
         tableview.move(0, 500)
         tableview.show()
-
+        db.close()
     @pyqtSlot()
     def generate_3_click(self):
         db = QSqlDatabase.addDatabase('QSQLITE')
@@ -213,3 +225,4 @@ class ReportWindow(QWidget):
         tableview.resizeColumnsToContents()
         tableview.move(0, 500)
         tableview.show()
+        db.close()
