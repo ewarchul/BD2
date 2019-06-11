@@ -2,9 +2,11 @@ import sqlite3
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel, QSqlQueryModel
 from PyQt5.QtWidgets import *#QTableView, QApplication
+
 class ReportWindow(QWidget):
 
-    def __init__(self):
+    def __init__(self, login):
+        self.login = login
         super().__init__()
         self.col1 = 0
         self.col2 = 300
@@ -144,7 +146,7 @@ class ReportWindow(QWidget):
         tableview.show()
         db.close()
 
-        text = "\n\n"
+        text = "Raport\n" + "Użytkownik: " + self.login + "\n\n"
         m = tableview.model()
         for i in range(m.columnCount()):
             for j in range(m.rowCount()):
