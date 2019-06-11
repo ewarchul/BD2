@@ -8,6 +8,8 @@ import sys
 import re
 from report_app import *
 
+login = ""
+
 def clearLayout(layout):
     for i in range(layout.count()): layout.itemAt(i).widget().close()
 class HelpWindow(QWidget):
@@ -61,13 +63,7 @@ class ViewWindow(QWidget):
                 query.prepare('select * from organizacja')
 
         elif cur_txt == 'umowa':
-            query_residual = 'wymagany_poziom_dostepu = \'{}\' and id_umowy = \'{}\' and nazwa_umowy = \'{}\' and rodzaj_umowy = \'{}\' and data_utworzenia = \'{}\' and podmiot_zewnetrzny_id_podmiotu = \'{}\''.format(self.filter_wymagany_acclvl.text(), self.filter_id_umowy.text(), self.filter_nazwa_umowy.text(), 
-                    self.filter_rodzaj_umowy.text(), self.filter_data_utworzenia.text(), self.filter_idz.text())
-            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
-            if(len(key_val)):
-                query.prepare('select * from umowa where ' + key_val)
-            else:
-                query.prepare('select * from umowa')
+            query.prepare('select * from {} where {}')
         elif cur_txt == 'dzial':
             query.prepare('select * from dzial;')
         query.exec()
@@ -171,30 +167,7 @@ class ViewWindow(QWidget):
             self.hbox.addWidget(self.filter_nazwa)
             self.hbox.addWidget(self.filter_regon)
         elif cur_txt == 'umowa':
-            self.filter_id_umowy = QLineEdit(self)
-            self.filter_nazwa_umowy = QLineEdit(self)
-            self.filter_rodzaj_umowy = QLineEdit(self)
-            self.filter_idz = QLineEdit(self)
-            self.filter_data_utworzenia = QLineEdit(self)
-            self.filter_wymagany_acclvl = QLineEdit(self)
-            self.filter_id_umowy.move(80, 150)
-            self.filter_nazwa_umowy.move(80, 200)
-            self.filter_rodzaj_umowy.move(80, 250)
-            self.filter_idz.move(80, 300)
-            self.filter_data_utworzenia.move(80, 350)
-            self.filter_wymagany_acclvl.move(80, 400)
-            self.filter_id_umowy.setPlaceholderText("Id umowy")
-            self.filter_nazwa_umowy.setPlaceholderText('Nazwa umowy')
-            self.filter_rodzaj_umowy.setPlaceholderText('Rodzaj umowy')
-            self.filter_idz.setPlaceholderText('ID podmiotu zew.')
-            self.filter_data_utworzenia.setPlaceholderText('Data utworzenia')
-            self.filter_wymagany_acclvl.setPlaceholderText('Wymagany poz. dost.')
-            self.hbox.addWidget(self.filter_wymagany_acclvl)
-            self.hbox.addWidget(self.filter_idz)
-            self.hbox.addWidget(self.filter_id_umowy)
-            self.hbox.addWidget(self.filter_data_utworzenia)
-            self.hbox.addWidget(self.filter_rodzaj_umowy)
-            self.hbox.addWidget(self.filter_nazwa_umowy)
+            self.filter.setPlaceholderText('Wymagany poziom dostępu')
         self.setLayout(self.hbox)
         self.cur_txt = cur_txt
         query_btn = QPushButton('Wykonaj zapytanie', self)
@@ -207,7 +180,7 @@ class ViewWindow(QWidget):
         self.title = 'Przegląd danych'
         self.top = 100
         self.left = 100
-        self.width = 800
+        self.width = 1000
         self.height = 1000
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.height, self.width)
@@ -263,7 +236,7 @@ class MenuWindow(QWidget):
 
     @pyqtSlot()
     def rep_click(self):
-        self.repWin = ReportWindow()
+        self.repWin = ReportWindow(login)
         self.repWin.show()
 class App(QWidget):
     @pyqtSlot()
@@ -275,6 +248,7 @@ class App(QWidget):
         self.w.show()
     @pyqtSlot()
     def log_click(self):
+        global login
         login = self.user.text()
         password = self.pw.text()
         acc_lvl = 5
