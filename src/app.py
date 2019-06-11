@@ -6,6 +6,8 @@ from PyQt5.QtGui import *
 import sqlite3
 import sys
 import re
+
+from Edit_Window import EditWindow
 from report_app import *
 
 login = ""
