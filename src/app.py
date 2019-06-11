@@ -45,8 +45,21 @@ class ViewWindow(QWidget):
                 query.prepare('select * from osoba_uprawniona where ' + key_val)
             else:
                 query.prepare('select * from osoba_uprawniona')
-        elif cur_txt == 'podmiot_zewnetrzny':
-            query.prepare('select * from {} where {}')
+        elif cur_txt == 'osoba_fizyczna':
+            query_residual = 'id_podmiotu = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and pesel = \'{}\' '.format(self.filter_id.text(), self.filter_imie.text(), self.filter_nazwisko.text(), self.filter_pesel.text())
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
+            if(len(key_val)):
+                query.prepare('select * from osoba_fizyczna where ' + key_val)
+            else:
+                query.prepare('select * from osoba_fizyczna')
+        elif cur_txt == 'organizacja':
+            query_residual = 'id_podmiotu = \'{}\' and nip = \'{}\' and nazwa = \'{}\' and regon = \'{}\' '.format(self.filter_id.text(), self.filter_nip.text(), self.filter_nazwa.text(), self.filter_regon.text())
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'', query_residual)))
+            if(len(key_val)):
+                query.prepare('select * from organizacja where ' + key_val)
+            else:
+                query.prepare('select * from organizacja')
+
         elif cur_txt == 'umowa':
             query_residual = 'wymagany_poziom_dostepu = \'{}\' and id_umowy = \'{}\' and nazwa_umowy = \'{}\' and rodzaj_umowy = \'{}\' and data_utworzenia = \'{}\' and podmiot_zewnetrzny_id_podmiotu = \'{}\''.format(self.filter_wymagany_acclvl.text(), self.filter_id_umowy.text(), self.filter_nazwa_umowy.text(), 
                     self.filter_rodzaj_umowy.text(), self.filter_data_utworzenia.text(), self.filter_idz.text())
@@ -123,8 +136,40 @@ class ViewWindow(QWidget):
             self.hbox.addWidget(self.filter_data_dodania)
             self.hbox.addWidget(self.filter_nazwisko)
             self.hbox.addWidget(self.filter_rodzaj_uprawnienia)
-        elif cur_txt == 'podmiot_zewnetrzny':
-            self.filter_person.setPlaceholderText('Rodzaj uprawnienia')
+        elif cur_txt == 'osoba_fizyczna':
+            self.filter_id = QLineEdit(self)
+            self.filter_imie = QLineEdit(self)
+            self.filter_nazwisko = QLineEdit(self)
+            self.filter_pesel = QLineEdit(self)
+            self.filter_id.move(80, 150)
+            self.filter_imie.move(80, 200)
+            self.filter_nazwisko.move(80, 250)
+            self.filter_pesel.move(80, 300)
+            self.filter_id.setPlaceholderText('Numer ID')
+            self.filter_imie.setPlaceholderText('Imię')
+            self.filter_nazwisko.setPlaceholderText('Nazwisko')
+            self.filter_pesel.setPlaceholderText('PESEL')
+            self.hbox.addWidget(self.filter_id)
+            self.hbox.addWidget(self.filter_imie)
+            self.hbox.addWidget(self.filter_nazwisko)
+            self.hbox.addWidget(self.filter_pesel)
+        elif cur_txt == 'organizacja':
+            self.filter_id = QLineEdit(self)
+            self.filter_nip = QLineEdit(self)
+            self.filter_nazwa = QLineEdit(self)
+            self.filter_regon = QLineEdit(self)
+            self.filter_id.move(80, 150)
+            self.filter_nip.move(80, 200)
+            self.filter_nazwa.move(80, 250)
+            self.filter_regon.move(80, 300)
+            self.filter_id.setPlaceholderText('Numer ID')
+            self.filter_nip.setPlaceholderText('NIP')
+            self.filter_nazwa.setPlaceholderText('Nazwa')
+            self.filter_regon.setPlaceholderText('REGON')
+            self.hbox.addWidget(self.filter_id)
+            self.hbox.addWidget(self.filter_nip)
+            self.hbox.addWidget(self.filter_nazwa)
+            self.hbox.addWidget(self.filter_regon)
         elif cur_txt == 'umowa':
             self.filter_id_umowy = QLineEdit(self)
             self.filter_nazwa_umowy = QLineEdit(self)
@@ -170,7 +215,8 @@ class ViewWindow(QWidget):
         combo = QComboBox(self)
         combo.addItem("dzial")
         combo.addItem("pracownik")
-        combo.addItem("podmiot_zewnetrzny")
+        combo.addItem("organizacja")
+        combo.addItem("osoba_fizyczna")
         combo.addItem("osoba_uprawniona")
         combo.addItem("umowa")
         combo.move(80, 100)
