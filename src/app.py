@@ -28,7 +28,6 @@ class ViewWindow(QWidget):
     def make_query(self):
         cur_txt = self.cur_txt
         db = QSqlDatabase.addDatabase('QSQLITE')
-        print(cur_txt)
         db.setDatabaseName('mydbx')
         db.open()
         query = QSqlQuery(db)
@@ -76,7 +75,7 @@ class ViewWindow(QWidget):
         tableview = QTableView(self)
         tableview.setModel(model)
         tableview.resizeColumnsToContents()
-        tableview.move(300, 100)
+        tableview.move(330, 250)
         tableview.resize(600, 200)
         tableview.show()
     def build_ui(self, text):
@@ -84,9 +83,6 @@ class ViewWindow(QWidget):
         model = QSqlQueryModel()
         clearLayout(self.hbox)
         if cur_txt == 'pracownik':
-            self.filter_check = QCheckBox("Aktwny?",self)
-            self.filter_check.move(250, 350)
-            self.filter_check.show()
             self.filter_acclvl = QLineEdit(self)
             self.filter_acclvl.setPlaceholderText('Poziom dostępu')
             self.filter_acclvl.move(80, 150)
@@ -208,11 +204,13 @@ class ViewWindow(QWidget):
         self.top = 100
         self.left = 100
         self.width = 1000
-        self.height = 1000
+        self.height = 300
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.height, self.width)
+        self.setFixedSize(1000, 450)
         self.hbox = QHBoxLayout()
         combo = QComboBox(self)
+        combo.setStyleSheet("QComboBox{color: black}")
         combo.addItem("dzial")
         combo.addItem("pracownik")
         combo.addItem("organizacja")
@@ -227,7 +225,6 @@ class AddWindow(QWidget):
     def make_query(self):
         cur_txt = self.cur_txt
         db = QSqlDatabase.addDatabase('QSQLITE')
-        print(cur_txt)
         db.setDatabaseName('mydbx')
         db.open()
         query = QSqlQuery(db)
@@ -308,9 +305,6 @@ class AddWindow(QWidget):
         model = QSqlQueryModel()
         clearLayout(self.hbox)
         if cur_txt == 'pracownik':
-            self.filter_check = QCheckBox("Aktwny?",self)
-            self.filter_check.move(250, 350)
-            self.filter_check.show()
             self.filter_acclvl = QLineEdit(self)
             self.filter_acclvl.setPlaceholderText('Poziom dostępu')
             self.filter_acclvl.move(80, 150)
@@ -424,7 +418,7 @@ class AddWindow(QWidget):
             self.hbox.addWidget(self.filter_wpd)
         self.setLayout(self.hbox)
         self.cur_txt = cur_txt
-        query_btn = QPushButton('Wykonaj zapytanie', self)
+        query_btn = QPushButton('Dodaj dane', self)
         query_btn.setStyleSheet('QPushButton {background-color: red}')
         query_btn.move(100, 400)
         query_btn.clicked.connect(self.make_query)
@@ -434,12 +428,17 @@ class AddWindow(QWidget):
         self.title = 'Dodawanie danych'
         self.top = 100
         self.left = 100
-        self.width = 1000
-        self.height = 1000
+        self.width = 500
+        self.height = 500
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.height, self.width)
         self.hbox = QHBoxLayout()
+        self.logo = QLabel(self)
+        pixmap = QPixmap('logo.jpg')
+        self.logo.setPixmap(pixmap)
+        self.logo.resize(500, 500)
         combo = QComboBox(self)
+        combo.setStyleSheet("QComboBox{color: black}")
         combo.addItem("pracownik")
         combo.addItem("organizacja")
         combo.addItem("osoba_fizyczna")
@@ -449,7 +448,218 @@ class AddWindow(QWidget):
         combo.activated[str].connect(self.build_ui)
         self.current_text = str(combo.currentText())
 class DeleteWindow(QWidget):
-        pass
+    @pyqtSlot()
+    def make_query(self):
+        cur_txt = self.cur_txt
+        db = QSqlDatabase.addDatabase('QSQLITE')
+        db.setDatabaseName('mydbx')
+        db.open()
+        query = QSqlQuery(db)
+        if cur_txt == 'pracownik':
+            query_residual = ' id_dzialu = \'{}\' and poziom_dostepu = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and id_pracownika = \'{}\' and stanowisko = \'{}\' '.format(self.filter_worker_idd.text(), self.filter_acclvl.text(), self.filter_worker_name.text(), self.filter_worker_surname.text(), self.filter_worker_id.text(), self.filter_worker_job.text())
+            id_val = ' '.join(re.findall('id_pracownika = \S+', query_residual))
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from pracownik where '+ id_val)
+
+            dfx = cursor.fetchall()
+            if(not len(dfx)):
+                QMessageBox.about(self, 'Komunikat', 'Wpis o podanym numerze ID nie istnieje!')
+            else:
+                query.prepare('delete from pracownik where ' + id_val) 
+                QMessageBox.about(self, 'Komunikat', 'Wpis {} z bazy danych został pomyślnie usunięty.'.format(dfx)) 
+        elif cur_txt == 'osoba_uprawniona':
+            query_residual = 'wymagany_poziom_dostepu = \'{}\' and numer_osoby = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and rodzaj_uprawnienia = \'{}\' and data_dodania = \'{}\' '.format(self.filter_wymagany_acclvl.text(), self.filter_id.text(), self.filter_imie.text(), 
+                    self.filter_nazwisko.text(), self.filter_rodzaj_uprawnienia.text(), self.filter_data_dodania.text())
+            keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
+            values = ','.join(re.findall('\'.*?\'', query_residual))
+            id_val = ' '.join(re.findall('numer_osoby = \S+', query_residual))
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from osoba_uprawniona where '+ id_val)
+            dfx = cursor.fetchall()
+            if(not len(dfx)):
+                QMessageBox.about(self, 'Komunikat', 'Wpis o podanym numerze ID nie istnieje!')
+            else:
+                query.prepare('delete from osoba_uprawniona where ' + id_val)
+                QMessageBox.about(self, 'Komunikat', 'Wpis {} z bazy danych został pomyślnie usunięty.'.format(dfx)) 
+        elif cur_txt == 'osoba_fizyczna':
+            query_residual = 'id_podmiotu = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and pesel = \'{}\' '.format(self.filter_id.text(), self.filter_imie.text(), self.filter_nazwisko.text(), self.filter_pesel.text())
+            keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
+            values = ','.join(re.findall('\'.*?\'', query_residual))
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
+            id_val = ' '.join(re.findall('id_podmiotu = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from osoba_fizyczna where '+ id_val)
+            dfx = cursor.fetchall()
+            if(not len(dfx)):
+                QMessageBox.about(self, 'Komunikat', 'Wpis o podanym numerze ID nie istnieje!')
+            else:
+                query.prepare('delete from osoba_fizyczna where '+ id_val)
+                QMessageBox.about(self, 'Komunikat', 'Wpis {} z bazy danych został pomyślnie usunięty.'.format(dfx)) 
+        elif cur_txt == 'organizacja':
+            query_residual = 'id_podmiotu = \'{}\' and nip = \'{}\' and nazwa = \'{}\' and regon = \'{}\' '.format(self.filter_id.text(), self.filter_nip.text(), self.filter_nazwa.text(), self.filter_regon.text())
+            keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
+            values = ','.join(re.findall('\'.*?\'', query_residual))
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
+            id_val = ' '.join(re.findall('id_podmiotu = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from organizacja where '+ id_val)
+            dfx = cursor.fetchall()
+            if(not len(dfx)):
+                QMessageBox.about(self, 'Komunikat', 'Wpis o podanym numerze ID nie istnieje!')
+            else:
+                query.prepare('delete from organizacja where ' + id_val)
+                QMessageBox.about(self, 'Komunikat', 'Wpis {} z bazy danych został pomyślnie usunięty.'.format(dfx)) 
+        elif cur_txt == 'umowa':
+            query_residual = 'id_umowy = \'{}\' and nazwa_umowy = \'{}\' and podmiot_zewnetrzny_id_podmiotu = \'{}\' and rodzaj_umowy = \'{}\' and data_utworzenia = \'{}\' and wymagany_poziom_dostepu = \'{}\''.format(self.filter_idu.text(), self.filter_nu.text(), self.filter_pz.text(), self.filter_rz.text(), self.filter_du.text(), self.filter_wpd.text())
+            keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
+            values = ','.join(re.findall('\'.*?\'', query_residual))
+            key_val = re.sub('X', ' and ','X'.join(re.findall('\w+ = \'\S+\'' ,query_residual)))
+            id_val = ' '.join(re.findall('id_umowy = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from umowa where '+ id_val)
+            dfx = cursor.fetchall()
+            if(not len(dfx)):
+                QMessageBox.about(self, 'Komunikat', 'Wpis o podanym numerze ID nie istnieje!')
+            else:
+                query.prepare('delete from umowa where ' + id_val)
+                QMessageBox.about(self, 'Komunikat', 'Wpis {} z bazy danych został pomyślnie usunięty.'.format(dfx)) 
+        query.exec()
+        model = QSqlQueryModel()
+        model.setQuery(query)
+    def build_ui(self, text):
+        cur_txt = text
+        model = QSqlQueryModel()
+        clearLayout(self.hbox)
+        if cur_txt == 'pracownik':
+            self.filter_acclvl = QLineEdit(self)
+            self.filter_acclvl.setPlaceholderText('Poziom dostępu')
+            self.filter_acclvl.move(80, 150)
+            self.filter_worker_name = QLineEdit(self)
+            self.filter_worker_name.setPlaceholderText('Imię')
+            self.filter_worker_name.move(80, 200)
+            self.filter_worker_id = QLineEdit(self)
+            self.filter_worker_id.setPlaceholderText('Numer ID')
+            self.filter_worker_id.move(80, 250)
+            self.filter_worker_surname = QLineEdit(self)
+            self.filter_worker_surname.setPlaceholderText('Nazwisko')
+            self.filter_worker_surname.move(80, 300)
+            self.filter_worker_job = QLineEdit(self)
+            self.filter_worker_job.setPlaceholderText('Stanowisko')
+            self.filter_worker_job.move(80, 350)
+            self.filter_worker_idd = QLineEdit(self)
+            self.filter_worker_idd.setPlaceholderText('ID działu')
+            self.filter_worker_idd.move(80, 400) 
+            self.hbox.addWidget(self.filter_worker_id)
+        elif cur_txt == 'osoba_uprawniona':
+            self.filter_id = QLineEdit(self)
+            self.filter_imie = QLineEdit(self)
+            self.filter_nazwisko = QLineEdit(self)
+            self.filter_id_umowy = QLineEdit(self)
+            self.filter_rodzaj_uprawnienia = QLineEdit(self)
+            self.filter_data_dodania = QLineEdit(self)
+            self.filter_wymagany_acclvl = QLineEdit(self)
+            self.filter_id.move(80, 150)
+            self.filter_imie.move(80, 200)
+            self.filter_nazwisko.move(80, 250)
+            self.filter_id_umowy.move(80, 300)
+            self.filter_rodzaj_uprawnienia.move(80, 350)
+            self.filter_data_dodania.move(80, 400)
+            self.filter_wymagany_acclvl.move(80, 450)
+            self.filter_id.setPlaceholderText('Numer ID')
+            self.filter_imie.setPlaceholderText('Imię')
+            self.filter_nazwisko.setPlaceholderText('nazwisko')
+            self.filter_id_umowy.setPlaceholderText('ID umowy')
+            self.filter_rodzaj_uprawnienia.setPlaceholderText('Rodzaj uprawnienia')
+            self.filter_data_dodania.setPlaceholderText('Data dodania')
+            self.filter_wymagany_acclvl.setPlaceholderText('Wymagany poziom dostępu')
+            self.hbox.addWidget(self.filter_id)
+        elif cur_txt == 'osoba_fizyczna':
+            self.filter_id = QLineEdit(self)
+            self.filter_imie = QLineEdit(self)
+            self.filter_nazwisko = QLineEdit(self)
+            self.filter_pesel = QLineEdit(self)
+            self.filter_id.move(80, 150)
+            self.filter_imie.move(80, 200)
+            self.filter_nazwisko.move(80, 250)
+            self.filter_pesel.move(80, 300)
+            self.filter_id.setPlaceholderText('Numer ID')
+            self.filter_imie.setPlaceholderText('Imię')
+            self.filter_nazwisko.setPlaceholderText('Nazwisko')
+            self.filter_pesel.setPlaceholderText('PESEL')
+            self.hbox.addWidget(self.filter_id)
+        elif cur_txt == 'organizacja':
+            self.filter_id = QLineEdit(self)
+            self.filter_nip = QLineEdit(self)
+            self.filter_nazwa = QLineEdit(self)
+            self.filter_regon = QLineEdit(self)
+            self.filter_id.move(80, 150)
+            self.filter_nip.move(80, 200)
+            self.filter_nazwa.move(80, 250)
+            self.filter_regon.move(80, 300)
+            self.filter_id.setPlaceholderText('Numer ID')
+            self.filter_nip.setPlaceholderText('NIP')
+            self.filter_nazwa.setPlaceholderText('Nazwa')
+            self.filter_regon.setPlaceholderText('REGON')
+            self.hbox.addWidget(self.filter_id)
+        elif cur_txt == 'umowa':
+            self.filter_idu = QLineEdit(self)
+            self.filter_nu = QLineEdit(self)
+            self.filter_pz = QLineEdit(self)
+            self.filter_rz = QLineEdit(self)
+            self.filter_du = QLineEdit(self)
+            self.filter_wpd = QLineEdit(self)
+            self.filter_idu.move(80, 150) 
+            self.filter_nu.move(80, 200) 
+            self.filter_pz.move(80, 250) 
+            self.filter_rz.move(80, 300) 
+            self.filter_du.move(80, 350) 
+            self.filter_wpd.move(80, 400) 
+            self.filter_idu.setPlaceholderText('ID umowy')
+            self.filter_nu.setPlaceholderText('Nazwa umowy') 
+            self.filter_pz.setPlaceholderText('ID pod. zew.')
+            self.filter_rz.setPlaceholderText('Rodzaj umowy') 
+            self.filter_du.setPlaceholderText('Data utworzenia') 
+            self.filter_wpd.setPlaceholderText('Wymagany poz. dost.') 
+            self.hbox.addWidget(self.filter_idu)
+        self.setLayout(self.hbox)
+        self.cur_txt = cur_txt
+        query_btn = QPushButton('Usuń dane', self)
+        query_btn.setStyleSheet('QPushButton {background-color: red}')
+        query_btn.move(100, 400)
+        query_btn.clicked.connect(self.make_query)
+        query_btn.show()
+    def __init__(self):
+        super().__init__()
+        self.title = 'Usuwanie danych'
+        self.top = 100
+        self.left = 100
+        self.width = 500
+        self.height = 500
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.top, self.left, self.height, self.width)
+        self.hbox = QHBoxLayout()
+        self.logo = QLabel(self)
+        pixmap = QPixmap('logo.jpg')
+        self.logo.setPixmap(pixmap)
+        self.logo.resize(500, 500)
+        combo = QComboBox(self)
+        combo.setStyleSheet("QComboBox{color: black}")
+        combo.addItem("pracownik")
+        combo.addItem("organizacja")
+        combo.addItem("osoba_fizyczna")
+        combo.addItem("osoba_uprawniona")
+        combo.addItem("umowa")
+        combo.move(80, 100)
+        combo.activated[str].connect(self.build_ui)
+        self.current_text = str(combo.currentText())
+ 
 class MenuWindow(QWidget):
     def __init__(self):
         super().__init__()
