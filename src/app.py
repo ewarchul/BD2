@@ -235,7 +235,15 @@ class AddWindow(QWidget):
             query_residual = ' id_dzialu = \'{}\' and poziom_dostepu = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and id_pracownika = \'{}\' and stanowisko = \'{}\' '.format(self.filter_worker_idd.text(), self.filter_acclvl.text(), self.filter_worker_name.text(), self.filter_worker_surname.text(), self.filter_worker_id.text(), self.filter_worker_job.text())
             keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
             values = ','.join(re.findall('\'.*?\'', query_residual))
-            query.prepare('insert into pracownik ('+ keys + ') values (' + values + ')')
+            id_val = ' '.join(re.findall('id_pracownika = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from pracownik where '+ id_val)
+            if(len(cursor.fetchall())):
+                QMessageBox.about(self, 'Komunikat', 'Istnieje już pracownik o zadanym numerze ID!')
+            else:
+                query.prepare('insert into pracownik ('+ keys + ') values (' + values + ')')
+                QMessageBox.about(self, 'Komunikat', 'Wpis do bazy danych został dodany pomyślnie.')
         elif cur_txt == 'osoba_uprawniona':
             query_residual = 'wymagany_poziom_dostepu = \'{}\' and numer_osoby = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and rodzaj_uprawnienia = \'{}\' and data_dodania = \'{}\' '.format(self.filter_wymagany_acclvl.text(), self.filter_id.text(), self.filter_imie.text(), 
                     self.filter_nazwisko.text(), self.filter_rodzaj_uprawnienia.text(), self.filter_data_dodania.text())
@@ -253,22 +261,19 @@ class AddWindow(QWidget):
             values = ','.join(re.findall('\'.*?\'', query_residual))
             query.prepare('insert into organizacja ('+ keys + ') values (' + values + ')')
         elif cur_txt == 'umowa':
+            query_residual = 'id_umowy = \'{}\' and nazwa_umowy = \'{}\' and podmiot_zewnetrzny_id_podmiotu = \'{}\' and rodzaj_umowy = \'{}\' and data_utworzenia = \'{}\' and wymagany_poziom_dostepu = \'{}\''.format(self.filter_idu.text(), self.filter_nu.text(), self.filter_pz.text(), self.filter_rz.text(), self.filter_du.text(), self.filter_wpd.text())
             keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
             values = ','.join(re.findall('\'.*?\'', query_residual))
-            query.prepare('insert into organizacja ('+ keys + ') values (' + values + ')')
-
-            query.prepare('select * from {} where {}')
-        elif cur_txt == 'dzial':
-            query.prepare('select * from dzial;')
+            query.prepare('insert into umowa ('+ keys + ') values (' + values + ')')
         query.exec()
         model = QSqlQueryModel()
         model.setQuery(query)
-        tableview = QTableView(self)
-        tableview.setModel(model)
-        tableview.resizeColumnsToContents()
-        tableview.move(300, 100)
-        tableview.resize(600, 200)
-        tableview.show()
+#        tableview = QTableView(self)
+ #       tableview.setModel(model)
+  #      tableview.resizeColumnsToContents()
+   #     tableview.move(300, 100)
+    #    tableview.resize(600, 200)
+     #   tableview.show()
     def build_ui(self, text):
         cur_txt = text
         model = QSqlQueryModel()
@@ -295,7 +300,6 @@ class AddWindow(QWidget):
             self.filter_worker_idd = QLineEdit(self)
             self.filter_worker_idd.setPlaceholderText('ID działu')
             self.filter_worker_idd.move(80, 400) 
-            self.hbox.addWidget(self.filter_check)
             self.hbox.addWidget(self.filter_worker_job)
             self.hbox.addWidget(self.filter_worker_id)
             self.hbox.addWidget(self.filter_acclvl)
@@ -365,7 +369,30 @@ class AddWindow(QWidget):
             self.hbox.addWidget(self.filter_nazwa)
             self.hbox.addWidget(self.filter_regon)
         elif cur_txt == 'umowa':
-            self.filter.setPlaceholderText('Wymagany poziom dostępu')
+            self.filter_idu = QLineEdit(self)
+            self.filter_nu = QLineEdit(self)
+            self.filter_pz = QLineEdit(self)
+            self.filter_rz = QLineEdit(self)
+            self.filter_du = QLineEdit(self)
+            self.filter_wpd = QLineEdit(self)
+            self.filter_idu.move(80, 150) 
+            self.filter_nu.move(80, 200) 
+            self.filter_pz.move(80, 250) 
+            self.filter_rz.move(80, 300) 
+            self.filter_du.move(80, 350) 
+            self.filter_wpd.move(80, 400) 
+            self.filter_idu.setPlaceholderText('ID umowy')
+            self.filter_nu.setPlaceholderText('Nazwa umowy') 
+            self.filter_pz.setPlaceholderText('ID pod. zew.')
+            self.filter_rz.setPlaceholderText('Rodzaj umowy') 
+            self.filter_du.setPlaceholderText('Data utworzenia') 
+            self.filter_wpd.setPlaceholderText('Wymagany poz. dost.') 
+            self.hbox.addWidget(self.filter_idu)
+            self.hbox.addWidget(self.filter_nu)
+            self.hbox.addWidget(self.filter_pz)
+            self.hbox.addWidget(self.filter_rz)
+            self.hbox.addWidget(self.filter_du)
+            self.hbox.addWidget(self.filter_wpd)
         self.setLayout(self.hbox)
         self.cur_txt = cur_txt
         query_btn = QPushButton('Wykonaj zapytanie', self)
@@ -375,7 +402,7 @@ class AddWindow(QWidget):
         query_btn.show()
     def __init__(self):
         super().__init__()
-        self.title = 'Przegląd danych'
+        self.title = 'Dodawanie danych'
         self.top = 100
         self.left = 100
         self.width = 1000
