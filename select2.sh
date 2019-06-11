@@ -3,10 +3,10 @@
 # umowy zawarte z daną firmą w danym czasie z minimalną ilością pozycji + ilość pozycji w każdej umowie
 
 # te dane powinny brac sie z GUI - teraz je zahardkodowałem w celach developerskich
-ID_PODMIOTU=1234
+ID_PODMIOTU=48
 MINIMALNA_ILOSC_POZYCJI_UMOWY=11
 DATA_OD='1800-01-01'
-DATA_DO='2010-01-01'
+DATA_DO='2030-01-01'
 
 
 sqlite3 mydb "
