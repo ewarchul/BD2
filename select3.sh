@@ -3,7 +3,7 @@
 # organizacje, które podpisały z nami umowę w danym roku i do ich wszystkich umów jest łącznie tyle, a tyle osób upoważnionych
 
 # te dane powinny brac sie z GUI - teraz je zahardkodowałem w celach developerskich
-ROK='2001'
+ROK='2019'
 
 sqlite3 mydb "
 SELECT 
