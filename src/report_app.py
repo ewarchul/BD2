@@ -146,18 +146,7 @@ class ReportWindow(QWidget):
         tableview.show()
         db.close()
 
-        text = "Raport\n" + "Użytkownik: " + self.login + "\n\n"
-        m = tableview.model()
-        for i in range(m.columnCount()):
-            for j in range(m.rowCount()):
-                text += m.index(i, j).data() + " "
-            text += "\n"
-
-        print(text)
-
-        text_file = open("raport.txt", "w")
-        text_file.write(text)
-        text_file.close()
+        self.gen_report(tableview, "raport1.txt")
 
     @pyqtSlot()
     def generate_2_click(self):
@@ -195,6 +184,8 @@ class ReportWindow(QWidget):
         tableview.move(0, 500)
         tableview.show()
         db.close()
+
+        self.gen_report(tableview, "raport2.txt")
     @pyqtSlot()
     def generate_3_click(self):
         db = QSqlDatabase.addDatabase('QSQLITE')
@@ -228,3 +219,19 @@ class ReportWindow(QWidget):
         tableview.move(0, 500)
         tableview.show()
         db.close()
+
+        self.gen_report(tableview, "raport3.txt")
+
+    def gen_report(self, tableview, file_name):
+        text = "Raport\n" + "Użytkownik: " + self.login + "\n\n"
+        m = tableview.model()
+        for i in range(m.columnCount()):
+            for j in range(m.rowCount()):
+                text += str(m.index(i, j).data()) + " "
+            text += "\n"
+
+        print(text)
+
+        text_file = open(file_name, "w")
+        text_file.write(text)
+        text_file.close()
