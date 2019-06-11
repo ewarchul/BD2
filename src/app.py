@@ -100,7 +100,6 @@ class ViewWindow(QWidget):
             self.filter_worker_job = QLineEdit(self)
             self.filter_worker_job.setPlaceholderText('Stanowisko')
             self.filter_worker_job.move(80, 350)
-            self.hbox.addWidget(self.filter_check)
             self.hbox.addWidget(self.filter_worker_job)
             self.hbox.addWidget(self.filter_worker_id)
             self.hbox.addWidget(self.filter_acclvl)
