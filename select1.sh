@@ -4,9 +4,9 @@
 # gdyby nie te 'where' w drugim selectcie, to zapytanie zwracałoby 4 gości, ale zwraca jednego, bo jeden ma zbyt slaby poziom dostępu, drugi zbyt wcześnie dostał dostęp, a trzeci jest kobietą
 
 # te dane powinny brac sie z GUI - teraz je zahardkodowałem w celach developerskich
-ID_UMOWY=23
+ID_UMOWY=68
 CZY_KOBIETA=false
-DATA_DODANIA='1994-01-01'
+DATA_DODANIA='1980-01-01'
 
 sqlite3 mydb "
 SELECT 
