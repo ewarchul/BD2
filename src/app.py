@@ -249,31 +249,60 @@ class AddWindow(QWidget):
                     self.filter_nazwisko.text(), self.filter_rodzaj_uprawnienia.text(), self.filter_data_dodania.text())
             keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
             values = ','.join(re.findall('\'.*?\'', query_residual))
-            query.prepare('insert into osoba_uprawniona ('+ keys + ') values (' + values + ')')
+            id_val = ' '.join(re.findall('number_osoby = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from osoba_uprawniona where '+ id_val)
+            if(len(cursor.fetchall())):
+                QMessageBox.about(self, 'Komunikat', 'Istnieje już osoba uprawniona o zadanym numerze ID!')
+            else:
+                query.prepare('insert into osoba_uprawniona ('+ keys + ') values (' + values + ')')
+                QMessageBox.about(self, 'Komunikat', 'Wpis do bazy danych został dodany pomyślnie.')
         elif cur_txt == 'osoba_fizyczna':
             query_residual = 'id_podmiotu = \'{}\' and imie = \'{}\' and nazwisko = \'{}\' and pesel = \'{}\' '.format(self.filter_id.text(), self.filter_imie.text(), self.filter_nazwisko.text(), self.filter_pesel.text())
             keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
             values = ','.join(re.findall('\'.*?\'', query_residual))
-            query.prepare('insert into osoba_fizyczna ('+ keys + ') values (' + values + ')')
+            id_val = ' '.join(re.findall('id_podmiotu = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from osoba_fizyczna where '+ id_val)
+            if(len(cursor.fetchall())):
+                QMessageBox.about(self, 'Komunikat', 'Istnieje już podmiot zewnętrzny o zadanym numerze ID!')
+            else:
+                query.prepare('insert into osoba_fizyczna ('+ keys + ') values (' + values + ')')
+                QMessageBox.about(self, 'Komunikat', 'Wpis do bazy danych został dodany pomyślnie.')
+
         elif cur_txt == 'organizacja':
             query_residual = 'id_podmiotu = \'{}\' and nip = \'{}\' and nazwa = \'{}\' and regon = \'{}\' '.format(self.filter_id.text(), self.filter_nip.text(), self.filter_nazwa.text(), self.filter_regon.text())
             keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
             values = ','.join(re.findall('\'.*?\'', query_residual))
-            query.prepare('insert into organizacja ('+ keys + ') values (' + values + ')')
+            id_val = ' '.join(re.findall('id_podmiotu = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from organizacja where '+ id_val)
+            if(len(cursor.fetchall())):
+                QMessageBox.about(self, 'Komunikat', 'Istnieje już podmiot zewnętrzny o zadanym numerze ID!')
+            else:
+                query.prepare('insert into organizacja ('+ keys + ') values (' + values + ')')
+                QMessageBox.about(self, 'Komunikat', 'Wpis do bazy danych został dodany pomyślnie.')
+
         elif cur_txt == 'umowa':
             query_residual = 'id_umowy = \'{}\' and nazwa_umowy = \'{}\' and podmiot_zewnetrzny_id_podmiotu = \'{}\' and rodzaj_umowy = \'{}\' and data_utworzenia = \'{}\' and wymagany_poziom_dostepu = \'{}\''.format(self.filter_idu.text(), self.filter_nu.text(), self.filter_pz.text(), self.filter_rz.text(), self.filter_du.text(), self.filter_wpd.text())
             keys = re.sub(',and', '',','.join(re.findall('\w+ ', query_residual)))
             values = ','.join(re.findall('\'.*?\'', query_residual))
-            query.prepare('insert into umowa ('+ keys + ') values (' + values + ')')
+            id_val = ' '.join(re.findall('id_umowy = \S+', query_residual))
+            conn = sqlite3.connect('mydbx')
+            cursor = conn.cursor()
+            cursor.execute('select * from umowa where '+ id_val)
+            if(len(cursor.fetchall())):
+                QMessageBox.about(self, 'Komunikat', 'Istnieje już umowa o zadanym numerze ID!')
+            else:
+                query.prepare('insert into umowa ('+ keys + ') values (' + values + ')')
+                QMessageBox.about(self, 'Komunikat', 'Wpis do bazy danych został dodany pomyślnie.')
+
         query.exec()
         model = QSqlQueryModel()
         model.setQuery(query)
-#        tableview = QTableView(self)
- #       tableview.setModel(model)
-  #      tableview.resizeColumnsToContents()
-   #     tableview.move(300, 100)
-    #    tableview.resize(600, 200)
-     #   tableview.show()
     def build_ui(self, text):
         cur_txt = text
         model = QSqlQueryModel()
@@ -411,7 +440,6 @@ class AddWindow(QWidget):
         self.setGeometry(self.top, self.left, self.height, self.width)
         self.hbox = QHBoxLayout()
         combo = QComboBox(self)
-        combo.addItem("dzial")
         combo.addItem("pracownik")
         combo.addItem("organizacja")
         combo.addItem("osoba_fizyczna")
